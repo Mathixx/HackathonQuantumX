@@ -1,3 +1,5 @@
+from mistralai import Mistral
+
 api_key = "W7jZ5RO87zVxhO0gehFjjg0TqyXasmGj"
 model = "mistral-small-latest"
 

@@ -5,6 +5,31 @@ function ChatBox() {
   const [input, setInput] = useState(""); // State for the current input message
   const messagesEndRef = useRef(null); // Create a ref for the messages container
 
+  // Fetch the initial message when the component mounts
+  useEffect(() => {
+    const fetchInitialMessage = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/init-message", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setMessages([{ text: data.response, sender: "bot" }]);  // Initialize with bot message
+        } else {
+          console.error("Failed to fetch initial message:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error fetching initial message:", error);
+      }
+    };
+
+    fetchInitialMessage();
+  }, []); // Empty dependency array ensures this runs only once when the component mounts
+
   // Scroll to the bottom whenever messages update
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
