@@ -10,7 +10,7 @@ if not api_key:
 client = Mistral(api_key=api_key)
 
 # Define the custom agent ID TO CHANGE
-custom_agent_id ="mistral-small-latest" #"ag:68495cb5:20241123:expert-tpmc:bbd4e63b"
+custom_agent_id ="ag:68495cb5:20241123:sales-manager:ac891c31"
 
 class Sales:
     def __init__(self):
@@ -41,7 +41,7 @@ class Sales:
 
         try:
             # Send the query to the custom agent
-            response = self.client.chat.complete(model=self.agent_id, messages=messages)
+            response = self.client.chat.complete(agent_id=self.agent_id, messages=messages)
 
             # Extract the assistant's reply
             if response and response.choices:
