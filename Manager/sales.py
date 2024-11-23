@@ -24,17 +24,18 @@ class Sales:
         self.client = Mistral(api_key=api_key)
 
 
-    def get_response(self, user_query):
+    def get_response(self, last_advice, user_query):
         """
         Get skincare advice based on the user's query.
 
         :param user_query: A string containing the user's question or concern about skincare.
         :return: A string with the AI's response or an error message if the response fails.
         """
+        context = "Your last message sent to the user was : " + last_advice + ". Here is the user's response :" + user_query
         messages = [
             {
                 "role": "user",
-                "content": user_query
+                "content": context
             }
         ]
 
