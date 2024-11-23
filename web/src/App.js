@@ -7,6 +7,7 @@ import Basket from "./Basket";  // Import Basket
 import "./App.css";
 
 function App() {
+
   const [activeTab, setActiveTab] = useState('products'); // For tab navigation
   const [updateTrigger, setUpdateTrigger] = useState(false); // Trigger for ProductList update
 

@@ -11,7 +11,7 @@ function ChatBox({ triggerProductUpdate }) {
   useEffect(() => {
     const fetchInitialMessage = async () => {
       try {
-        const response = await fetch("http://localhost:5000/init-message", {
+        const response = await fetch("http://127.0.0.1:5000/init-message", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -52,7 +52,7 @@ function ChatBox({ triggerProductUpdate }) {
 
       try {
         // Send the message to the Python back-end (e.g., Flask)
-        const response = await fetch("http://localhost:5000/send-message", {
+        const response = await fetch("http://127.0.0.1:5000/send-message", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
