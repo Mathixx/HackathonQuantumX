@@ -1,26 +1,48 @@
 import React, { useState, useEffect } from "react";
 
-function ProductList() {
+function ProductList({ updateTrigger }) {
   const [products, setProducts] = useState([]);
-  
+
+  // Fetch products whenever updateTrigger changes
   useEffect(() => {
-    // Fetch products or update based on chat input
-    setProducts([
-      { id: 1, name: 'Product 1', price: '$10' },
-      { id: 2, name: 'Product 2', price: '$15' },
-      { id: 3, name: 'Product 3', price: '$20' },
-    ]);
-  }, []);
-  
+    const fetchUpdatedProducts = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/get-products", {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setProducts(data.products);
+        } else {
+          console.error("Failed to fetch products:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    // Fetch products if the updateTrigger is true
+    if (updateTrigger) {
+      fetchUpdatedProducts(); 
+    }
+
+  }, [updateTrigger]); // Dependency on updateTrigger
+
   return (
     <div>
       <h3>Products</h3>
       <ul>
-        {products.map(product => (
-          <li key={product.id}>
-            {product.name} - {product.price}
-          </li>
-        ))}
+        {products.length > 0 ? (
+          products.map((product) => (
+            <li key={product.id}>
+              {product.name} - {product.price}
+            </li>
+          ))
+        ) : (
+          <li>No products available.</li>
+        )}
       </ul>
     </div>
   );

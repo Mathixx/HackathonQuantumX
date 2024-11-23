@@ -1,8 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
+import ProductList from "./ProductList"; // Import the ProductList component
 
-function ChatBox() {
+function ChatBox({ triggerProductUpdate }) {
   const [messages, setMessages] = useState([]); // State to store messages
   const [input, setInput] = useState(""); // State for the current input message
+  const [fetchTrigger, setFetchTrigger] = useState(false); // State to trigger fetch in ProductList
   const messagesEndRef = useRef(null); // Create a ref for the messages container
 
   // Fetch the initial message when the component mounts
@@ -65,6 +67,7 @@ function ChatBox() {
             ...prevMessages,
             { text: data.response, sender: "bot" },
           ]);
+          triggerProductUpdate();
         } else {
           console.error("Error sending message to Python:", response.statusText);
         }
@@ -95,7 +98,7 @@ function ChatBox() {
         />
         <button onClick={handleSend}>Send</button>
       </div>
-    </div>
+      </div>
   );
 }
 
