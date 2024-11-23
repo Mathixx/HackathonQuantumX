@@ -42,7 +42,7 @@ class Expert:
 
         try:
             # Send the query to the custom agent
-            response = self.client.chat.complete(agent_id=self.agent_id, messages=messages)
+            response = self.client.agents.complete(agent_id=self.agent_id, messages=messages)
 
             # Extract the assistant's reply
             if response and response.choices:
