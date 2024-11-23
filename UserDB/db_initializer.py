@@ -20,19 +20,25 @@ cursor.execute("""
 CREATE TABLE IF NOT EXISTS purchases (
     purchase_id INTEGER PRIMARY KEY,
     product_name TEXT NOT NULL,
-    purchase_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    purchase_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
     rating INTEGER,
-    review TEXT
+    review TEXT,
+    buyer_id INTEGER,
+    FOREIGN KEY(buyer_id) REFERENCES users(user_id)
+    
 );
 """)
 
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS preferences (
-    preference_id INTEGER PRIMARY KEY,
-    preference_key TEXT NOT NULL,
-    preference_value TEXT NOT NULL
-);
-""")
+cursor.execute(''' CREATE IF NOT EXISTS TABLE users (
+    user_id INTEGER PRIMARY KEY,
+    user_first_name TEXT NOT NULL,
+    user_last_name TEXT NOT NULL,
+    date_sign_in TEXT NOT NULL,
+    user_age INTEGER NOT NULL,
+    user_gender TEXT NOT NULL,
+    user_info TEXT DEFAULT NULL
+    );
+    ''')
 
 # Commit and close connection
 conn.commit()
