@@ -101,13 +101,11 @@ class Query:
                 )
             
             print("got here 1")
-            print(response.choices[0])
+            print(response.choices[0].message.tool_calls[0].function.name)
             
             if response and response.choices:
-                print(response.tool_calls)
-                tool_call = response.choices[0].message.tool_calls[0]
-                function_name = tool_call["function"]["name"]
-                parameters = tool_call["function"]["parameters"]
+                function_name = response.choices[0].message.tool_calls[0].function.name
+                parameters = response.choices[0].message.tool_calls[0].function.arguments
 
                 print("got here 2")
                 
