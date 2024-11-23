@@ -1,0 +1,133 @@
+/* App.css */
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f0f2f5;
+}
+
+.app-container {
+  display: flex;
+  height: 100vh;
+}
+
+.right-panel, .right-panel {
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.right-panel {
+  width: 50%;
+  background-color: #ffffff;
+  border-right: 1px solid #ddd;
+}
+
+.left-panel {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  background-color: #f7f9fc;
+}
+
+.chat-box {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.chat-messages {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  border-bottom: 1px solid #ddd;
+  max-height: 650px; /* Set a fixed height for the chat window */
+}
+/* Container holding the chat messages */
+.chat-messages {
+  display: flex;
+  flex-direction: column; /* Stack messages vertically */
+  gap: 10px; /* Space between messages */
+  max-height: 660px; /* Optional: Limit height for scrolling */
+  overflow-y: auto; /* Enable vertical scrolling */
+  padding: 10px;
+}
+
+/* User message styles */
+.chat-message.user {
+  display: inline-block;
+  max-width: 80%;
+  word-wrap: break-word;
+  background-color: #e1f5fe; /* Light blue */
+  align-self: flex-end; /* Align to the right */
+  margin-left: auto;
+  padding: 5px 10px; /* Add padding for better appearance */
+  border-radius: 10px; /* Rounded corners */
+}
+
+/* Bot message styles */
+.chat-message.bot {
+  display: inline-block;
+  max-width: 80%;
+  word-wrap: break-word;
+  background-color: #e8eaf6; /* Light purple */
+  align-self: flex-start; /* Align to the left */
+  margin-right: auto;
+  padding: 5px 10px; /* Add padding for better appearance */
+  border-radius: 10px; /* Rounded corners */
+}
+
+.chat-input {
+  display: flex;
+  padding: 10px;
+  border-top: 1px solid #ccc;
+}
+
+.chat-input input {
+  flex: 1;
+  padding: 8px;
+  margin-right: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.chat-sender {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.tabs {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.tab {
+  flex: 1;
+  padding: 10px;
+  background-color: #e0e0e0;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+}
+
+.tab.active {
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+}
+
