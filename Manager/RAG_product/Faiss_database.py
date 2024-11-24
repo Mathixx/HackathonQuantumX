@@ -116,7 +116,7 @@ class FaissDatabase:
             db_path = FaissDatabase.database_faiss_path
 
         # Obtenir l'embedding de la requête
-        query_embedding = np.array([get_text_embedding(query, FaissDatabase.client)])
+        query_embedding = np.array(get_text_embedding(query, FaissDatabase.client))
 
         # Lire l'index Faiss
         try:
@@ -130,9 +130,46 @@ class FaissDatabase:
 
         return  I.tolist()[0]
 
+      
+      
         
 
+    @staticmethod
+    def modifie_input(text: str, index: int, db_path: str = None) -> None:
+        """
+        Modifie une entrée dans l'index en remplaçant le vecteur existant par l'embedding du texte donné.
 
+        Args:
+            text (str): Le texte à convertir en vecteur.
+            index (int): L'indice du vecteur à modifier dans l'index.
+            db_path (str, optionnel): Le chemin vers la base de données FAISS. Si non spécifié, le chemin par défaut sera utilisé.
+        """
+        
+        if db_path is None:
+            db_path = FaissDatabase.database_faiss_path
 
+        # Étape 1: Obtenir l'embedding du texte
+        text_embedding = np.array(get_text_embedding(text, FaissDatabase.client))
+        
+        # Étape 2: Charger l'index existant depuis le fichier
+        index = faiss.read_index(db_path)
 
-   
+        # Étape 3: Extraire le vecteur à modifier à partir de l'index
+        vector_to_modify = index.reconstruct(index)
+
+        # Étape 4: Remplacer le vecteur existant par le nouveau vecteur (embedding du texte)
+        new_vector = text_embedding  
+
+        # Étape 5: Créer un nouvel index pour ajouter le vecteur modifié
+        new_index = faiss.IndexFlatL2(vector_to_modify.shape[0])
+
+        # Ajouter tous les vecteurs de l'index, sauf celui qui est modifié
+        for i in range(index.ntotal):
+            if i != index:
+                new_index.add(index.reconstruct(i).reshape(1, -1))
+            else:
+                # Ajouter le nouveau vecteur à l'indice spécifié
+                new_index.add(new_vector.reshape(1, -1))
+
+        # Étape 6: Sauvegarder l'index modifié dans le fichier
+        faiss.write_index(new_index, db_path)

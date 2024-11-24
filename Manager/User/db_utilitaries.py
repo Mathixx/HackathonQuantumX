@@ -2,7 +2,14 @@ import os
 import sqlite3
 import datetime
 import sys
+import pandas as pd
 from typing import List, Tuple , Dict
+from pathlib import Path
+# Ajouter le dossier parent au chemin Python
+sys.path.append(str(Path(__file__).resolve().parent.parent))
+from RAG_product.Faiss_database import FaissDatabase
+
+
 
 class InvalidInputError(Exception):
     """Exception levée pour les entrées invalides"""
@@ -20,13 +27,16 @@ class UpdateDatabase:
     """
     Class for updating the database
     """
-
-    # Define the userDB folder and file
+    # Define the userDB folder
     USER_DB_FOLDER = "Manager\\User\\userDB"
     USER_DB_FILE = "user_data.db"
+    USER_FAISS_DB_FILE = "user_index_faiss.faiss"
+    # Ensure the userDB folder exists
+    os.makedirs(USER_DB_FOLDER, exist_ok=True)
 
     # Define the path to the database
     user_db_path = os.path.join(USER_DB_FOLDER, USER_DB_FILE)
+    user_faiss_db_path = os.path.join(USER_DB_FOLDER, USER_FAISS_DB_FILE)
 
     @staticmethod
     def add_purchase(product_name, buyer_id, rating=None, review=None):
@@ -111,6 +121,19 @@ class UpdateDatabase:
         conn.commit()
         conn.close()
         print(f"Added user: {first_name} {last_name}")
+        
+    @staticmethod
+    def add_users_from_df(df: pd.DataFrame)->None :
+        """add multiple users from a dataframe, add their personnal_info in the faiss dataframe  
+
+        Args:
+            df (pd.DataFrame): _description_
+        """
+        conn = sqlite3.connect(UpdateDatabase.user_db_path)
+        df.to_sql('users', conn, if_exists='append', index=False)
+        conn.close()
+        users_info= df['user_info'].to_list()
+        FaissDatabase.add_texts_to_database(users_info, db_path= UpdateDatabase.user_faiss_db_path)
 
     @staticmethod
     def update_user_info(user_id: int, user_info: str)-> None :
@@ -132,7 +155,7 @@ class UpdateDatabase:
             cursor.execute(
                 """
                 UPDATE users
-                SET personal_info = ?
+                SET user_info = ?
                 WHERE user_id = ?
                 """,
                 (user_info, user_id)
@@ -140,6 +163,8 @@ class UpdateDatabase:
             conn.commit()
             conn.close()
             print(f"Updated user ID {user_id} with personal_info: {user_info}")
+            FaissDatabase.modifie_input(user_info, user_id, db_path = UpdateDatabase.user_faiss_db_path
+                                        )
 
     @staticmethod
     def update_user_profile(user_id: int,
