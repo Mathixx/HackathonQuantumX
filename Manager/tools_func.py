@@ -65,7 +65,7 @@ def get_k_nearest_users( user_id : int , k= 3) -> list[Tuple]:
     Returns:
         list[Tuple]
     """
-    path_db_users = "Manager\\User\\userDB\\user_index_faiss.faiss"
+    path_db_users = "Manager/User/userDB/user_index_faiss.faiss"
     user_id = 0 # pour le test
     
     user_info = RetrieveDatabase.get_user_info(user_id)
@@ -92,7 +92,7 @@ def get_best_purchases_from_neighbours(user_id = 0) -> str:
     purchases =  []
     for i in index_neighbours:
         neighbours_id = index_neighbours[i]
-        purchase_neighbours = RetrieveDatabase.get_best_k_purchases_by_user_id(neighbours_id)
+        purchase_neighbours = RetrieveDatabase.get_best_k_purchases_by_user_id(neighbours_id, 3)
         purchases.extend(purchase_neighbours)
     text = ""
     for purchase in purchases : 
@@ -113,7 +113,7 @@ def get_not_delivered(user_id: int) -> str:
     text = "Here are the commands not received: \n"
     
     for purchase in purchases:
-        _, _, product_name, purchase_date , _,_,_,_ = purchase
+        product_name, purchase_date  = purchase[2], purchase[3]
         text += f"{product_name}, purchased on the {product_name}"
         
     return text
