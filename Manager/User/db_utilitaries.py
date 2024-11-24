@@ -46,7 +46,7 @@ class UpdateDatabase:
         cursor.execute(
             """
             INSERT INTO purchases (product_id, product_name, delivered, rating, review, buyer_id)
-            VALUES (?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?)
             """,
             (product_id, product_name,delivered, rating, review, buyer_id)
         )

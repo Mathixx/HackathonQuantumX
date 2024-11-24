@@ -42,6 +42,8 @@ cursor.execute(''' CREATE TABLE IF NOT EXISTS users (
     );
     ''')
 
+
+
 # Commit and close connection
 conn.commit()
 conn.close()
