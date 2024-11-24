@@ -35,13 +35,13 @@ class BaseMistral:
             str: _description_
         """
     
-        query = f"Context: Below is a paragraph describing a user's habits and preferences, followed 
+        query = f"""Context: Below is a paragraph describing a user's habits and preferences, followed 
         by a conversation between the user and a retail sales agent. 
         Analyze the conversation to identify any new information about the user's habits or preferences 
         and incorporate these updates into the existing paragraph. Ensure the updated paragraph reflects the most accurate 
         and detailed habits of the user. \n Guidelines: \nFocus on extracting key details about the user's habits from the conversation.
                 Prioritize new and relevant information, ensuring it aligns with the context of the paragraph.
-                Rewrite the paragraph seamlessly to include these updates, keeping the tone consistent. \n Task: \n Original paragraph : {user_info}"
+                Rewrite the paragraph seamlessly to include these updates, keeping the tone consistent. \n Task: \n Original paragraph : {user_info}"""
 
         messages = conversation.append({"role" : "user", "content": query})  
         
