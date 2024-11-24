@@ -43,17 +43,23 @@ class Query:
 
         try:
             # Send the query to the custom agent*
+            print("SENDING ")
 
             response = self.client.chat.complete(
                 model = self.agent_id,
                 messages = messages,
                 tools = self.tools,
-                tool_choice = "any",
+                tool_choice = "auto",
                 )
             
-            #print(response.choices[0].message.tool_calls[0].function.name)
+            print("RESPONSE")
+            print(response)
             
             if response and response.choices:
+                print("RESPONSE is HERE")
+                if response.choices[0].message.tool_calls == None:
+                    print("No function called")
+                    return "No function called", "No parameters"
                 function_name = response.choices[0].message.tool_calls[0].function.name
                 parameters = response.choices[0].message.tool_calls[0].function.arguments
                 
@@ -66,12 +72,15 @@ class Query:
                     # Normally, you'd call the actual function here
                     best_products = fake_retrieve_best_products(parameters)
                     return function_name, best_products
+                elif function_name == "handle_insufficient_info":
+                    return function_name, parameters
                 else:
                     return "error", f"Unknown function: {function_name}"
             else:
+                print("No response")
                 return "error", "I'm sorry, I couldn't generate a response. Please try again."
         except Exception as e:
-            print("Error happens in query")
+            print("Error happens when calling the function", e)
             return "error", f"An error occurred: {e}"
         
         

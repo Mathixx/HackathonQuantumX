@@ -48,5 +48,35 @@ tools_conf = [
                 "additionalProperties": False
             }
         }
+    },
+    {
+    "type": "function",
+    "function": {
+        "name": "handle_insufficient_info",
+        "description": "Handles cases where there is not enough information to proceed with a product search and requests additional details from the user.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "missing_fields": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "description": "The list of fields that are missing or insufficient for the search."
+                    },
+                    "description": "The specific fields that are missing from the input, requiring user input."
+                },
+                "suggested_fields": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "description": "The list of fields that the system suggests the user to provide next."
+                    },
+                    "description": "Fields that are most critical to gather additional information for a search."
+                }
+            },
+            "required": ["missing_fields", "action"],
+            "additionalProperties": False
+        }
     }
+}
 ]
