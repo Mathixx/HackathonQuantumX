@@ -4,7 +4,7 @@ import os
 
 class Retrieve_from_db_prd:
      # Define the productDB folder and file
-    PRODUCT_DB_FOLDER = "Manager\\Product"
+    PRODUCT_DB_FOLDER = "Manager/Product"
     PRODUCT_DB_FILE = "products.db"
 
     # Define the path to the database
@@ -31,7 +31,7 @@ class Retrieve_from_db_prd:
         placeholders = ', '.join(['?'] * len(product_id_list))
 
         # Requête SQL avec des paramètres
-        query = f"SELECT * FROM purchases WHERE purchase_id IN ({placeholders})"
+        query = f"SELECT * FROM products WHERE product_id IN ({placeholders})"
 
         # Exécuter la requête
         cursor.execute(query, product_id_list)
@@ -53,7 +53,7 @@ class Retrieve_from_db_prd:
         """
         conn = sqlite3.connect(Retrieve_from_db_prd.product_db_path)
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM users WHERE user_id = ?", (product_id))
+        cursor.execute("SELECT * FROM product WHERE product_id = ?", (product_id))
         product = cursor.fetchone()
         conn.close()
         return product
@@ -86,4 +86,25 @@ class Retrieve_from_db_prd:
             paragraph += "Unfortunately, there is no detailed description available for this product."
         
         return paragraph
+    
+    
+    @classmethod
+    def get_best_products()->list[Tuple]:
+        """ renvoie les 5 produits ayant les meilleurs ratings avec au moins 20 avis 
+
+        Returns:
+            list[Tuple]
+        """
+        
+        conn = sqlite3.connect(Retrieve_from_db_prd.product_db_path)
+        cursor = conn.cursor()
+        cursor.execute("""SELECT * FROM products
+                        WHERE no_of_ratings > 10
+                        ORDER BY avg_ratings DESC
+                        LIMIT 5
+                       """)
+        products = cursor.fetchall()
+        conn.close()
+        return products 
+        
 
