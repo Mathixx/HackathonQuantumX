@@ -13,7 +13,7 @@ class Retrieve_from_db_prd:
     
     @staticmethod
     def get_product_by_id_list( product_id_list : list[int] ) -> list[Tuple]:
-        """ récupère tous les produuits d'une liste d'id 
+        """ récupère tous les produits d'une liste d'id 
 
         Args:
             product_id_list (list[int])
@@ -24,6 +24,8 @@ class Retrieve_from_db_prd:
         # Connexion à la base de données
         conn = sqlite3.connect(Retrieve_from_db_prd.product_db_path)
         cursor = conn.cursor()
+        
+        print("I AM HERE")
 
         
 

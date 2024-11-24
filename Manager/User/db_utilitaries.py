@@ -28,7 +28,7 @@ class UpdateDatabase:
     Class for updating the database
     """
     # Define the userDB folder
-    USER_DB_FOLDER = "Manager\\User\\userDB"
+    USER_DB_FOLDER = "Manager/User/userDB"
     USER_DB_FILE = "user_data.db"
     USER_FAISS_DB_FILE = "user_index_faiss.faiss"
     # Ensure the userDB folder exists
@@ -91,7 +91,7 @@ class UpdateDatabase:
         print(f"Updated purchase ID {purchase_id} with rating: {rating}, review: {review}")
 
     @staticmethod
-    def add_user(first_name: str, last_name: str, age: int, gender: str = 'undifined', date_sign_in=None) -> None:
+    def add_user(first_name: str, last_name: str, age: int, gender: str = 'undefined', date_sign_in=None) -> None:
         """Add a user to the database. The first 3 args must not be empty.
         
         Args:
@@ -123,12 +123,25 @@ class UpdateDatabase:
         print(f"Added user: {first_name} {last_name}")
         
     @staticmethod
-    def add_users_from_df(df: pd.DataFrame)->None :
+    def add_users_from_df(df: pd.DataFrame = None, panda_path: str = None)->None :
         """add multiple users from a dataframe, add their personnal_info in the faiss dataframe  
 
         Args:
             df (pd.DataFrame): _description_
         """
+        if df is None:
+            if panda_path is None:
+                raise ValueError("Either 'df' or 'panda_path' must be provided.")
+        # Load data from the file
+        if panda_path.endswith('.csv'):
+            df = pd.read_csv(panda_path)
+        else:
+            raise ValueError("Unsupported file format. Use a CSV or Excel file.")
+    
+        # Ensure the DataFrame is valid
+        if not isinstance(df, pd.DataFrame):
+            raise ValueError("The provided input must be a valid Pandas DataFrame.")
+        
         conn = sqlite3.connect(UpdateDatabase.user_db_path)
         df.to_sql('users', conn, if_exists='append', index=False)
         conn.close()
@@ -300,7 +313,7 @@ class RetrieveDatabase:
     Class for retrieving data from the database
     """
      # Define the userDB folder and file
-    USER_DB_FOLDER = "Manager\\User\\userDB"
+    USER_DB_FOLDER = "Manager/User/userDB"
     USER_DB_FILE = "user_data.db"
 
     # Define the path to the database

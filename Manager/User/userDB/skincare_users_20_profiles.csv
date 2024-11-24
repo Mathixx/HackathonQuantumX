@@ -1,0 +1,21 @@
+user_id,user_first_name,user_last_name,date_sign_in,user_age,user_gender,user_info
+1,Alice,Smith,2024-11-22,30,Female,Alice has dry skin and uses a hyaluronic acid moisturizer and SPF 50 sunscreen.
+2,Bob,Johnson,2024-11-21,25,Male,Bob has oily skin and uses a salicylic acid cleanser and oil-free moisturizer.
+3,Charlie,Brown,2024-11-20,35,Male,Charlie has combination skin and prefers a lightweight serum with niacinamide.
+4,Diana,Taylor,2024-11-19,28,Female,Diana has sensitive skin and relies on fragrance-free products with ceramides.
+5,Eve,Williams,2024-11-18,40,Female,Eve has mature skin and focuses on anti-aging products like retinol and vitamin C serum.
+6,Frank,Miller,2024-11-17,22,Male,Frank has acne-prone skin and uses benzoyl peroxide spot treatments and a gentle cleanser.
+7,Grace,Davis,2024-11-16,33,Female,Grace has dehydrated skin and uses a hydrating toner and an aloe vera gel moisturizer.
+8,Henry,Garcia,2024-11-15,45,Male,Henry has normal skin and uses a basic cleanser and sunscreen daily.
+9,Isabel,Martinez,2024-11-14,26,Female,Isabel has hyperpigmentation and prefers products with kojic acid and vitamin C.
+10,Jack,Lopez,2024-11-13,37,Male,Jack has large pores and uses a clay mask weekly to control oil.
+11,Karen,Wilson,2024-11-12,29,Female,Karen has rosacea and uses calming products with green tea extract and niacinamide.
+12,Liam,Anderson,2024-11-11,34,Male,Liam has sun-damaged skin and relies on SPF 50 and a repair serum with peptides.
+13,Mia,Thomas,2024-11-10,32,Female,Mia has dull skin and uses an exfoliating toner with glycolic acid twice a week.
+14,Noah,Moore,2024-11-09,41,Male,Noah has combination skin and prefers balancing cleansers and gel moisturizers.
+15,Olivia,Jackson,2024-11-08,27,Female,"Olivia has sensitive, acne-prone skin and uses products with sulfur and centella asiatica."
+16,Paul,White,2024-11-07,31,Male,"Paul has dry, flaky skin and uses an oat-based moisturizer and hydrating serums."
+17,Quinn,Harris,2024-11-06,36,Non-binary,Quinn has oily skin and prefers mattifying products with salicylic acid.
+18,Rose,Clark,2024-11-05,24,Female,Rose has fine lines and uses collagen-boosting serums and sunscreen religiously.
+19,Sam,Lewis,2024-11-04,38,Male,Sam has eczema and uses emollient-rich creams with ceramides and no fragrance.
+20,Tina,Walker,2024-11-03,39,Female,Tina has redness-prone skin and relies on products with azelaic acid and calming botanicals.

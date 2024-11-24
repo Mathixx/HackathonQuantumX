@@ -36,9 +36,11 @@ def get_k_nearests_product(query: str, k :int = 3) -> str :
         query (str): 
         k (int, optional): Defaults to 3.
     """
-    id_produits_list = FaissDatabase.search(query, k )
+    id_produits_list = FaissDatabase.search(query, k)
+    print("ID PRODUCTS", id_produits_list)
+    print(type(id_produits_list))
     produits = Retrieve_from_db_prd.get_product_by_id_list(id_produits_list)
-
+    print(produits[0])
     
     #Appeler la fonction qui affiche les produits
     

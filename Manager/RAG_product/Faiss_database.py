@@ -16,8 +16,7 @@ def get_text_embedding(input, client, i: int = 0):
     Returns:
         list[float]: Embedding du texte.
     """
-    time.sleep(0.3)
-    print(f"embedding {i}")
+    time.sleep(0.2)
     embeddings_batch_response = client.embeddings.create(
         model="mistral-embed",
         inputs=input
@@ -37,7 +36,7 @@ class FaissDatabase:
 
     # Chemins vers les fichiers de la base de données
    
-    database_faiss_path = "Manager\\RAG_product\\index_faiss.faiss"
+    database_faiss_path = "Manager/RAG_product/index_faiss.faiss"
     
     @staticmethod
     def add_texts_to_database(texts: list[str], db_path : str = None ) -> None:
@@ -116,7 +115,7 @@ class FaissDatabase:
             db_path = FaissDatabase.database_faiss_path
 
         # Obtenir l'embedding de la requête
-        query_embedding = np.array(get_text_embedding(query, FaissDatabase.client))
+        query_embedding = np.array([get_text_embedding(query, FaissDatabase.client)])
 
         # Lire l'index Faiss
         try:
@@ -125,9 +124,12 @@ class FaissDatabase:
             print(f"Erreur lors de la lecture de l'index Faiss : {e}")
             return []
 
-        # Rechercher les k plus proches voisins
-        D, I = index.search(query_embedding, k)
-
+        result = index.search(query_embedding, k)
+        if isinstance(result, tuple) and len(result) == 2:
+            D, I = result
+        else:
+            I = result
+        
         return  I.tolist()[0]
 
       

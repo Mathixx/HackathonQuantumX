@@ -2,7 +2,7 @@ import os
 import sqlite3
 import faiss
 # Define the userDB folder
-USER_DB_FOLDER = "Manager\\User\\userDB"
+USER_DB_FOLDER = "Manager/User/userDB"
 USER_DB_FILE = "user_data.db"
 USER_FAISS_DB_FILE = "user_index_faiss.faiss"
 # Ensure the userDB folder exists
