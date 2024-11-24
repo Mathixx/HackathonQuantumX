@@ -30,6 +30,11 @@ class Manager:
             string_result = ""
             for item in result:
                 string_result += str(item) + "\n"
+        elif function_name == "get_k_nearests_product":
+            print("HERE FINALLY")
+            print(result[1])
+            self.products = result[1]
+            string_result = str(result)
         else:
             string_result = str(result)
 

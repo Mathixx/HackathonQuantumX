@@ -72,7 +72,7 @@ class BaseMistral:
         """
         
         query = f"""
-             You are a model capable of summarizing a text while preserving its essence. Your task is to generate a concise and clear summary by extracting key information and simplifying ideas without losing important content.
+            You are a model capable of summarizing a text while preserving its essence. Your task is to generate a concise and clear summary by extracting key information and simplifying ideas without losing important content.
 
             Task:
             Summarize the following text succinctly, including the most important points and keeping a neutral, informative tone.

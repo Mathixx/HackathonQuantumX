@@ -25,10 +25,19 @@ def init_message():
 
 @app.route('/get-products', methods=['GET'])
 def get_products():
+    print("Getting products...")
     products = manager.get_products()
-    print("prod" )
+    print("Original Products List:")
     print(products)
-    return jsonify({"products": products})
+
+    # Transform the products list into a JSON-compatible format
+    json_products = [{"name": product[0], "price": product[2]} for product in products]
+
+    print("Transformed JSON Products:")
+    print(json_products)
+
+    # Return the JSON object
+    return jsonify({"products": json_products})
 
 
 if __name__ == '__main__':

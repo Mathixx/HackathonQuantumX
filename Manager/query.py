@@ -96,8 +96,8 @@ class Query:
                     print("GET K NEAREST PRODUCT")
                     query = parameters_dict.get("query")
                     k = parameters_dict.get("k", 3)
-                    nearest_products = get_k_nearests_product(query, k)
-                    return function_name, nearest_products
+                    result = get_k_nearests_product(query, k)
+                    return function_name, result
                 
                 elif function_name == "get_k_nearest_users":
                     user_id = parameters["properties"]["user_id"]

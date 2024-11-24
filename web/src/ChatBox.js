@@ -4,7 +4,7 @@ import ProductList from "./ProductList"; // Import the ProductList component
 function ChatBox({ triggerProductUpdate }) {
   const [messages, setMessages] = useState([]); // State to store messages
   const [input, setInput] = useState(""); // State for the current input message
-  const [fetchTrigger, setFetchTrigger] = useState(false); // State to trigger fetch in ProductList
+  const [isLoading, setIsLoading] = useState(false); // State to track if a response is pending
   const messagesEndRef = useRef(null); // Create a ref for the messages container
 
   // Fetch the initial message when the component mounts
@@ -15,12 +15,12 @@ function ChatBox({ triggerProductUpdate }) {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-          }
+          },
         });
 
         if (response.ok) {
           const data = await response.json();
-          setMessages([{ text: data.response, sender: "bot" }]);  // Initialize with bot message
+          setMessages([{ text: data.response, sender: "bot" }]); // Initialize with bot message
         } else {
           console.error("Failed to fetch initial message:", response.statusText);
         }
@@ -37,10 +37,10 @@ function ChatBox({ triggerProductUpdate }) {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Function to handle sending a message   
+  // Function to handle sending a message
   const handleKeyPress = (e) => {
-    if (e.key === "Enter") {
-      handleSend();  // Call handleSend if Enter is pressed
+    if (e.key === "Enter" && !isLoading) {
+      handleSend(); // Call handleSend if Enter is pressed and not loading
     }
   };
 
@@ -49,6 +49,7 @@ function ChatBox({ triggerProductUpdate }) {
       const newMessages = [...messages, { text: input, sender: "user" }];
       setMessages(newMessages);
       setInput("");
+      setIsLoading(true); // Disable input and button while waiting for a response
 
       try {
         // Send the message to the Python back-end (e.g., Flask)
@@ -73,6 +74,8 @@ function ChatBox({ triggerProductUpdate }) {
         }
       } catch (error) {
         console.error("Error connecting to the server:", error);
+      } finally {
+        setIsLoading(false); // Re-enable input and button when the response is received
       }
     }
   };
@@ -93,13 +96,17 @@ function ChatBox({ triggerProductUpdate }) {
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)} // Update input state
-          onKeyDown={handleKeyPress}  // Listen for Enter key
+          onKeyDown={handleKeyPress} // Listen for Enter key
           placeholder="Type your message..."
+          disabled={isLoading} // Disable input while loading
         />
-        <button onClick={handleSend}>Send</button>
+        <button onClick={handleSend} disabled={isLoading}>
+          {isLoading ? "Sending..." : "Send"} {/* Change button text while loading */}
+        </button>
       </div>
-      </div>
+    </div>
   );
 }
 
 export default ChatBox;
+
