@@ -1,11 +1,11 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from manager import Manager # Enable CORS for all routes
+from agent import Agent # Enable CORS for all routes
 
 app = Flask(__name__)
 CORS(app)
 
-manager = Manager()
+agent = Agent()
 
 @app.route('/send-message', methods=['POST'])
 def send_message():
@@ -13,20 +13,20 @@ def send_message():
     user_message = data.get('message')
     
     # Process the message and get a response (you can integrate your logic here)
-    bot_response = manager.get_response(user_message)
+    bot_response = agent.get_response_to_user(user_message)
 
     return jsonify({"response": bot_response})
 
 @app.route('/init-message', methods=['POST'])
 def init_message():
-    init_message = manager.get_init_message()
+    init_message = agent.get_init_message()
     return jsonify({"response": init_message})
 
 
 @app.route('/get-products', methods=['GET'])
 def get_products():
     print("Getting products...")
-    products = manager.get_products()
+    products = agent.products
     print("Original Products List:")
     print(products)
 

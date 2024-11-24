@@ -1,11 +1,11 @@
 from mistralai import Mistral
-from tool_config import tools_conf
+import tool_config 
 import json
 
 ### IMPORTE NECESSARY FUNCTIONS CALLED IN THE QUERY FUNCTION
 # from .... import retrieve_best_productsV0
 # from .... import retrieve_best_productsV1
-from tools_func import *
+import tools_func
 # Retrieve the API key from the environment variable
 api_key = "W7jZ5RO87zVxhO0gehFjjg0TqyXasmGj"
 if not api_key:
@@ -16,11 +16,12 @@ custom_agent_id = "ag:68495cb5:20241123:expert-tpmc:bbd4e63b"
 
 
 class Agent:
-    def __init__(self,tools_conf,names_to_functions):
+    def __init__(self):
         self.products = []
+        self.cart = []
         self.client = Mistral(api_key=api_key)
-        self.tools = tools_conf
-        self.names_to_functions = names_to_functions
+        self.tools = tool_config.tools_conf
+        self.names_to_functions = tools_func.names_to_functions
         self.agent_id = custom_agent_id
 
         self.user_query = ""
@@ -33,11 +34,17 @@ class Agent:
     def get_response_to_user(self, user_message):
         self.user_query = user_message
         self.build_expert_input()
-        while self.querry_data != "STOP":
+        thinking_lim = 2
+        while self.querry_data != "STOP" and thinking_lim > 0:
             self.update_advice()
+            print("1 : " , self.expert_input)
             self.get_next_querry()
+            print("2 : " , self.expert_input)
             self.get_next_action()
+            print("3 : " , self.expert_input)
             self.update_data(self.querry_data)
+            print("4 : " , self.expert_input)
+            thinking_lim -= 1
         return self.get_reseponse()
 
         
@@ -72,7 +79,7 @@ class Agent:
         self.expert_input = agent_response.choices[0].message.content
         
     def get_next_action(self):
-        task = "From this inpu state, extract the content of the 'new_data_query' field, and use it to decide what action to take next. The action should be a function call, with the right parameters. The function to call should be chosen based on the new_data_query field. The parameters should be extracted from the new_data_query field. The other fields should be discarded. The action should be in the right format. "
+        task = "From this input state, extract the content of the 'new_data_query' field, and use it to decide what action to take next. The action should be a function call, with the right parameters. The function to call should be chosen based on the new_data_query field. The parameters should be extracted from the new_data_query field. The other fields should be discarded. The action should be in the right format. "
 
 
         txt_message = task + " Here is the input state :   " + self.expert_input
@@ -92,13 +99,20 @@ class Agent:
                 )
         function_name = response.choices[0].message.tool_calls[0].function.name
         function_params = json.loads(response.choices[0].message.tool_calls[0].function.arguments)
-        print(function_name)
-        print(function_params)
-        self.querry_data = self.names_to_functions[function_name](**function_params)
-        
+        if function_name == "get_k_nearests_product":
+            new_products, self.querry_data = self.names_to_functions[function_name](**function_params)
+            if new_products != []:
+                self.products = new_products
+        elif function_name == "add_to_cart":
+            new_cart, self.querry_data = self.names_to_functions[function_name](self.cart, **function_params)
+            for c in new_cart:
+                self.cart.append(c)
+        else:
+            _ , self.querry_data = self.names_to_functions[function_name](**function_params)
+
     
     def get_next_querry(self):
-        task = "based on the client input, and the available data, get the next data query to be made. Use actions, verbs, to indicate what should be querried, such as Find... Indentify... . If we already have the needed information, the data querry can be empty, 'no more information needed'. Take into account all the available data and advcie. Dont ask more than needed. You should stop at some point. Only look for information that you don't already have. When possible, try to look for products that might be good for the user, if none have been identified yet. The query should contain all the necessary information for the querry agent to choose the right function to call and give the right argument. Be precise. Only lookf for one information at a time. Only modify the querry data field.  Answer should be in the right format. "
+        task = "Based on the client input and the available data, generate the next data query to be made. The query should use action verbs (e.g., 'Find', 'Identify') to clearly indicate what needs to be queried. If the required information is already available, leave the data query field empty.Only request the information that is still needed, and avoid asking for unnecessary details. When possible, prioritize looking for products that may be suitable for the user, especially if none have been identified yet. Ensure that each query is focused on one specific piece of information at a time.If products are already in availble_data, you should not request them again. The query should contain all necessary information for the query agent to select the correct function and provide the right argument. The response should be in the correct format, modifying only the data_query field, and should stop once all necessary data has been gathered."
         txt_message = task + "  " + self.expert_input
         messages = [
             {
@@ -123,3 +137,6 @@ class Agent:
         agent_response = self.client.agents.complete(agent_id=self.agent_id, messages=messages)
         self.expert_input = agent_response.choices[0].message.content
         return self.expert_input
+    
+    def get_init_message(self): 
+        return "Hello! I am your personnal assistant for today. How can I help you ?"

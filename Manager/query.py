@@ -85,11 +85,7 @@ class Query:
                     return function_name, parameters
                 
                 
-                elif function_name == "check_user_purchase_history":
-                    user_id = parameters["properties"]["user_id"]
-                    k =  parameters["properties"]["k"]
-                    history = get_k_purchase(user_id, k)
-                    return function_name, history
+                
                 
                 
                 elif function_name == "get_k_nearests_product":
@@ -99,11 +95,7 @@ class Query:
                     result = get_k_nearests_product(query, k)
                     return function_name, result
                 
-                elif function_name == "get_k_nearest_users":
-                    user_id = parameters["properties"]["user_id"]
-                    k = int(parameters["properties"].get("k", 3))
-                    nearest_users = get_k_nearest_users(user_id, k)
-                    return function_name, nearest_users
+                
                 
                 elif function_name == "add_purchase":
                     user_id = parameters_dict.get("user_id")
@@ -112,24 +104,11 @@ class Query:
                     result = add_purchase(product_id,product_name, user_id) 
                     return function_name, result
                 
-                elif function_name == "cancel_purchase":
-                    user_id = parameters_dict.get("user_id")
-                    purchase_id = int(parameters_dict.get("purchase_id", None))
-                    product_name = parameters_dict.get("product_name", None)
-                    purchase_date = parameters_dict.get("purchase_date", None)
-                    result = cancel_purchase(user_id, purchase_id, product_name, purchase_date) 
-                    return function_name, result
-                
-                elif function_name == "get_best_purchases_from_neighbours":
-                    user_id = int(parameters["properties"].get("user_id", 0))
-                    best_purchases = get_best_purchases_from_neighbours(user_id)
-                    return function_name, best_purchases
                 
                 
-                elif function_name == "get_not_delivered":
-                    user_id = int(parameters["properties"]["user_id"])
-                    not_delivered = get_not_delivered(user_id)
-                    return function_name, not_delivered
+                
+                
+                
                 else:
                     return "error", f"Unknown function: {function_name}"
             else:
