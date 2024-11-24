@@ -12,8 +12,8 @@ from RAG_product.Faiss_database import FaissDatabase
 
 class InitializeDatabase:
     
-    data_path = "Manager\\Product\product_data.csv"
-    db_path = "Manager\\Product\\products.db"
+    data_path = "Manager/Product/product_data.csv"
+    db_path = "Manager/Product/products.db"
     
     def __init__(self):
         """Initialise la base de donnée et la remplie avec les données du csv 

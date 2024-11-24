@@ -5,7 +5,7 @@ tools_conf = [
         "type": "function",
         "function": {
             "name": "get_k_nearests_product",
-            "description": "Search for the k products closest to the user's query .",
+            "description": "Search for the k products closest to the user's query.",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -28,7 +28,7 @@ tools_conf = [
         "type": "function",
         "function": {
             "name": "get_k_nearest_users",
-            "description": "search the users which have a similar profil than the user ",
+            "description": "Search for users who have a similar profile to the target user.",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -51,7 +51,7 @@ tools_conf = [
         "type": "function",
         "function": {
             "name": "get_best_purchases_from_neighbours",
-            "description": "Research the best product that was purchased by users with a similar profil ",
+            "description": "Retrieve the best products purchased by users with similar profiles.",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -61,7 +61,7 @@ tools_conf = [
                         "default": 0
                     }
                 },
-                "required": [],
+                "required": ["user_id"],
                 "additionalProperties": False
             }
         }
@@ -83,8 +83,7 @@ tools_conf = [
                 "additionalProperties": False
             }
         }
-    }
-       ,
+    },
     {
         "type": "function",
         "function": {
@@ -129,16 +128,15 @@ tools_conf = [
                 "type": "object",
                 "properties": {
                     "user_id": {
-                        "type": "int",
+                        "type": "integer",
                         "description": "The unique identifier for the user whose purchase history is being analyzed."
                     },
                     "k": {
-                        "type": "int",
-                        "description": "How many purchases to recover"
-                    },
-                 
+                        "type": "integer",
+                        "description": "How many purchases to recover."
+                    }
                 },
-                "required": ["user_id", "include_current_orders"],
+                "required": ["user_id", "k"],
                 "additionalProperties": False
             }
         }

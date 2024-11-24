@@ -1,6 +1,7 @@
 import os
 from mistralai import Mistral
 from tool_config import tools_conf
+import json
 
 ### IMPORTE NECESSARY FUNCTIONS CALLED IN THE QUERY FUNCTION
 # from .... import retrieve_best_productsV0
@@ -66,6 +67,12 @@ class Query:
                 # Log or handle tool call details
                 print(f"Function called: {function_name}")
                 print(f"Parameters: {parameters}")
+                
+                try:
+                    parameters_dict = json.loads(parameters)
+                except json.JSONDecodeError as e:
+                    print(f"Error decoding parameters: {e}")
+                    return "error", f"Invalid parameters: {parameters}"
 
                 # Simulate function execution for demo purposes
                 if function_name == "retrieve_best_products":
@@ -86,26 +93,27 @@ class Query:
                 
                 
                 elif function_name == "get_k_nearests_product":
-                    query = parameters["properties"]["query"]
-                    k = parameters["properties"].get("k", 3)
-                    nearest_products = get_k_nearests_product(query, k)
-                    return function_name, nearest_products
+                    print("GET K NEAREST PRODUCT")
+                    query = parameters_dict.get("query")
+                    k = parameters_dict.get("k", 3)
+                    result = get_k_nearests_product(query, k)
+                    return function_name, result
                 
                 elif function_name == "get_k_nearest_users":
                     user_id = parameters["properties"]["user_id"]
-                    k = parameters["properties"].get("k", 3)
+                    k = int(parameters["properties"].get("k", 3))
                     nearest_users = get_k_nearest_users(user_id, k)
                     return function_name, nearest_users
                 
                 
                 elif function_name == "get_best_purchases_from_neighbours":
-                    user_id = parameters["properties"].get("user_id", 0)
+                    user_id = int(parameters["properties"].get("user_id", 0))
                     best_purchases = get_best_purchases_from_neighbours(user_id)
                     return function_name, best_purchases
                 
                 
                 elif function_name == "get_not_delivered":
-                    user_id = parameters["properties"]["user_id"]
+                    user_id = int(parameters["properties"]["user_id"])
                     not_delivered = get_not_delivered(user_id)
                     return function_name, not_delivered
                 else:

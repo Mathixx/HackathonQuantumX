@@ -1,6 +1,7 @@
 from expert import Expert
 from sales import Sales
 from query import Query
+from User.db_utilitaries import UpdateDatabase 
 
 class Manager:
     def __init__(self):
@@ -10,7 +11,11 @@ class Manager:
         self.sales = Sales()
         self.last_pitch = ""
         self.last_advice = ""
-
+        self.product_db_path = "Product/products.db"
+        self.user_db = "User/userDB/user_data"
+        
+        # UpdateDatabase.add_users_from_df(panda_path="Manager/User/userDB/skincare_users_20_profiles.csv")
+        
 
     def get_response(self, input):
         advice = self.expert.get_advice(self.last_pitch, input)
@@ -25,6 +30,11 @@ class Manager:
             string_result = ""
             for item in result:
                 string_result += str(item) + "\n"
+        elif function_name == "get_k_nearests_product":
+            print("HERE FINALLY")
+            print(result[1])
+            self.products = result[1]
+            string_result = str(result)
         else:
             string_result = str(result)
 
