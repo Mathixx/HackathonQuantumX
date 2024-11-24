@@ -16,8 +16,11 @@ def user_purchase_history(user_id: int, k: int = 5) -> str:
     res = ""
     purchases = RetrieveDatabase.get_last_k_purchases_by_user_id(user_id, k)
     for purchase in purchases:
+        product_id = purchase[1]
+        price = Retrieve_from_db_prd.get_product_by_id(product_id)[-2]
         res += RetrieveDatabase.tuple_to_detailed_text(purchase)
         res += '\n'
+        res += f'The user payed {price} euros for this product'
     if not res:
         res = "NO HISTORY"
     return [], res
