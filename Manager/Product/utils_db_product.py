@@ -11,7 +11,7 @@ class Retrieve_from_db_prd:
     product_db_path = os.path.join(PRODUCT_DB_FOLDER, PRODUCT_DB_FILE)
     
     
-    @classmethod
+    @staticmethod
     def get_product_by_id_list( product_id_list : list[int] ) -> list[Tuple]:
         """ récupère tous les produuits d'une liste d'id 
 
@@ -58,7 +58,7 @@ class Retrieve_from_db_prd:
         conn.close()
         return product
     
-    @classmethod
+    @staticmethod
     def product_to_paragraph(product):
         """
         Prend une ligne de la table 'products' sous forme de tuple et retourne un paragraphe descriptif.
@@ -88,7 +88,7 @@ class Retrieve_from_db_prd:
         return paragraph
     
     
-    @classmethod
+    @staticmethod
     def get_best_products()->list[Tuple]:
         """ renvoie les 5 produits ayant les meilleurs ratings avec au moins 20 avis 
 
