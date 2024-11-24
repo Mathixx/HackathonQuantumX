@@ -102,7 +102,7 @@ def add_to_cart(precise_product_names: list[str], prices: list[int], amounts: li
     """
     Returns a list of the products added to the cart.
     """
-    return [(product, amount, price) for product, amount, price in zip(precise_product_names, amounts, prices)]
+    return [(product, amount, price) for product, amount, price in zip(precise_product_names, amounts, prices)], "Liste of products added to the cart."
 
 
 names_to_functions= {

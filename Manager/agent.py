@@ -98,8 +98,10 @@ class Agent:
                 tool_choice = "any",
                 )
         function_name = response.choices[0].message.tool_calls[0].function.name
+        print("function_name : ", function_name)
         function_params = json.loads(response.choices[0].message.tool_calls[0].function.arguments)
         if function_name == "get_k_nearests_product":
+            print("I AM LOOKING FOR PRODUCTS")
             new_products, self.querry_data = self.names_to_functions[function_name](**function_params)
             if new_products != []:
                 self.products = new_products

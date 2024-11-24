@@ -45,7 +45,7 @@ def get_cart():
     Fetch and display the current cart contents.
     """
     print("Getting cart contents...")
-    cart = manager.get_cart()  # Assuming `manager` has a `get_cart` method
+    cart = agent.cart  # Assuming `manager` has a `get_cart` method
     print("Cart contents:", cart)
 
     # Transform cart into JSON-compatible format
