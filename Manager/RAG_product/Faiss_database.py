@@ -16,7 +16,9 @@ def get_text_embedding(input, client, i: int = 0):
     Returns:
         list[float]: Embedding du texte.
     """
-    time.sleep(0.2)
+    time.sleep(0.3)
+    if i!= 0:
+        print(i)
     embeddings_batch_response = client.embeddings.create(
         model="mistral-embed",
         inputs=input
