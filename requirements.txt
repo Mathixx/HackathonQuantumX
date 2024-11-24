@@ -1,6 +1,6 @@
 jsonschema
 flask
-flask-cors
+flask_cors
 pandas
 numpy
 faiss-cpu
