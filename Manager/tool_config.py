@@ -5,7 +5,7 @@ tools_conf = [
         "type": "function",
         "function": {
             "name": "get_k_nearests_product",
-            "description": "Search for the k products closest to the user's needs. This function is to be used when looking for products to suggest to the client. If this information is already available, it should not be called.",
+            "description": "Search for the k products in the seller database that are closest to the user's needs. This function is to be used when looking for products to suggest to the client. If this information is already available, it should not be called.",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -49,8 +49,8 @@ tools_conf = [
     {
         "type": "function",
         "function": {
-            "name": "no_more_info_needed",
-            "description": "Indicates that no more information is needed for the current task. This should be called whenever the query is empty",
+            "name": "no_more_action_needed",
+            "description": "Indicates that no more actio or information is needed for the current task. This should be called whenever the query is empty but also when the asked task has already been accomplished.",
             "parameters": {}
         }
     },
