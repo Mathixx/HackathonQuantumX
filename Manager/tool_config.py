@@ -28,7 +28,7 @@ tools_conf = [
         "type": "function",
         "function": {
             "name": "user_purchase_history",
-            "description": "Retrieves the list of purchases made by the user. This should be called whenever the user asks for his previous purchases, or we need to look at his  purchases to recommend new products. Else , it should not be called.",
+            "description": "Retrieves the list of purchases OR orders made by the user. This should be called whenever the user asks for his previous purchases OR orders, or because we need to look at his purchases to recommend new products. Else, it should not be called.",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -50,7 +50,7 @@ tools_conf = [
         "type": "function",
         "function": {
             "name": "no_more_action_needed",
-            "description": "Indicates that no more actio or information is needed for the current task. This should be called whenever the query is empty but also when the asked task has already been accomplished.",
+            "description": "Indicates that no more action or information is needed for the current task. This should be called whenever the query is empty but also when the asked task has already been accomplished.",
             "parameters": {}
         }
     },
