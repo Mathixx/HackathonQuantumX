@@ -19,6 +19,7 @@ def send_message():
 
 @app.route('/init-message', methods=['POST'])
 def init_message():
+    agent.reset()
     init_message = agent.get_init_message()
     return jsonify({"response": init_message})
 

@@ -31,6 +31,17 @@ class Agent:
         self.next_data_query = ""
         self.expert_input = ""
         self.querry_data = ""
+        
+    def reset(self):
+        self.products = []
+        self.cart = []
+        self.memory = ""
+        self.user_query = ""
+        self.data = ""
+        self.advice = ""
+        self.next_data_query = ""
+        self.expert_input = ""
+        self.querry_data = ""
 
     def get_response_to_user(self, user_message):
         self.user_query = user_message
@@ -48,14 +59,31 @@ class Agent:
             self.update_data(self.querry_data)
             print("4 : " , self.expert_input)
             thinking_lim -= 1
-        resp = self.get_reseponse()
+        resp = self.get_response()
         self.memory = self.memory + " agent :  " + resp
         return resp
 
         
     def build_expert_input(self):
-        self.expert_input = "{\"user_input\": \"" + self.user_query + "\"; \"data_available\": \"" + self.data + "\"; \"Advice\": \"" + self.advice + "\"; \"new_data_query\": \"" + self.next_data_query + "\"}"
-        
+        print("Building expert input")
+        print("user input :", self.expert_input)
+        if self.expert_input != "":
+            # Parse the existing expert input as JSON
+            # Clean up the extra enclosing quotes and line breaks
+            cleaned_json_string = self.expert_input.strip('```json\n').strip('\n```') 
+            json_expert_input = json.loads(cleaned_json_string)
+            self.data = json_expert_input.get("data_available", "")
+        else:
+            # Initialize self.data if not already set
+            self.data = ""
+
+        #  Construct the new expert input as a JSON string
+        self.expert_input = json.dumps({
+            "user_input": self.user_query,
+            "data_available": self.data,
+            "Advice": self.advice,
+            "new_data_query": self.next_data_query
+        })   
 
     def update_advice(self):
         task = "based on the current input, updcate the advice to be made for the customer. Answer should be in the right format. Only the advice should be updated, and not the other fields. Answer should kept short. Don't make it too long. Go straight to the point."
@@ -132,8 +160,8 @@ class Agent:
         agent_response = self.client.agents.complete(agent_id=self.agent_id, messages=messages)
         self.expert_input = agent_response.choices[0].message.content
 
-    def get_reseponse(self):
-        task = "It seems all the information that could be obtained from the data base is in your possessing. Based on the current input, get the response to be made to the customer. Answer should be a string understandable by the client. Data querry should now be empty, as the information is transfered from there to available data. "
+    def get_response(self):
+        task = "It seems all the information that could be obtained from the data base is in your possessing. Based on the current input, get the response to be made to the customer. Answer should be a string understandable by the client. Data querry should now be empty, as the information is transfered from there to available data Write it as it will be read by the client, do not show internal dialog. "
         txt_message = "Here are the previous messages : " + self.memory + " ." + task + "  " + self.expert_input
         messages = [
             {
@@ -143,13 +171,10 @@ class Agent:
         ]
 
         agent_response = self.client.agents.complete(agent_id=self.agent_id, messages=messages)
-        self.expert_input = agent_response.choices[0].message.content
-        return self.expert_input
+        return agent_response.choices[0].message.content
     
     def get_init_message(self): 
-        recommendation, text = get_best_purchases_from_neighbours(self.user_id)
-        self.products = recommendation
+        # recommendation, text = get_best_purchases_from_neighbours(self.user_id)
+        # self.products = recommendation
         
-        
-        
-        return f"Hello! I am your personnal assistant for today. On the left you can find some recommendation :  How can I help you ?"
+        return f"Hello! I am your personnal assistant for today. How can I help you ?"

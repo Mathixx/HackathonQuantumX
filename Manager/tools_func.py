@@ -14,6 +14,7 @@ def no_more_action_needed() -> str:
 def user_purchase_history(user_id: int, k: int = 5) -> str:
     """Retrieve the k latest purchases in the database."""
     res = ""
+    user_id = 0
     purchases = RetrieveDatabase.get_last_k_purchases_by_user_id(user_id, k)
     for purchase in purchases:
         product_id = purchase[1]
