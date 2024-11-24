@@ -11,7 +11,7 @@ client = Mistral(api_key=api_key)
 
 # Define the custom agent ID
 # custom_agent_id = "ag:68495cb5:20241123:expert-tpmc:bbd4e63b"
-custom_agent_id = "mistral-small-latest"
+custom_agent_id = "ag:68495cb5:20241123:expert-tpmc:bbd4e63b"
 
 class Expert:
     def __init__(self):
@@ -25,23 +25,24 @@ class Expert:
         self.client = Mistral(api_key=api_key)
 
 
-    def get_advice(self, user_query):
+    def get_advice(self, last_pitch, user_query):
         """
         Get skincare advice based on the user's query.
 
         :param user_query: A string containing the user's question or concern about skincare.
         :return: A string with the AI's response or an error message if the response fails.
         """
+        context = "Your last message sent to the user was : " + last_pitch + ". Here is the user's response :" + user_query
         messages = [
             {
                 "role": "user",
-                "content": user_query
+                "content": context
             }
         ]
 
         try:
             # Send the query to the custom agent
-            response = self.client.chat.complete(model=self.agent_id, messages=messages)
+            response = self.client.agents.complete(agent_id=self.agent_id, messages=messages)
 
             # Extract the assistant's reply
             if response and response.choices:
