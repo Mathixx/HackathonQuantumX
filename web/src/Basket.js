@@ -1,27 +1,23 @@
-import React, { useState } from "react";
+import React from "react";
 
-function Basket() {
-  const [basket, setBasket] = useState([]);
-  
-  const handleAddToBasket = (product) => {
-    setBasket([...basket, product]);
-  };
-  
+function Basket({ basket }) {
   return (
     <div>
       <h3>Basket</h3>
       <ul>
-        {basket.map((item, index) => (
-          <li key={index}>
-            {item.name} - {item.price}
-          </li>
-        ))}
+        {basket.length > 0 ? (
+          basket.map((item, index) => (
+            <li key={index}>
+              {item.name} - Quantity: {item.quantity} - Price: {item.price}
+            </li>
+          ))
+        ) : (
+          <li>Your basket is empty.</li>
+        )}
       </ul>
-      <button onClick={() => handleAddToBasket({ name: 'Product 1', price: '$10' })}>
-        Add Product 1 to Basket
-      </button>
     </div>
   );
 }
 
 export default Basket;
+

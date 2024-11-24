@@ -5,7 +5,7 @@ tools_conf = [
         "type": "function",
         "function": {
             "name": "get_k_nearests_product",
-            "description": "Search for the k products closest to the user's needs. This function is to be used when looking for products to suggest to the client. If this information is already available, it should not be called.",
+            "description": "Search for the k products in the seller database that are closest to the user's needs. This function is to be used when looking for products to suggest to the client. If this information is already available, it should not be called.",
             "parameters": {
                 "type": "object",
                 "properties": {
@@ -49,71 +49,46 @@ tools_conf = [
     {
         "type": "function",
         "function": {
-            "name": "no_more_info_needed",
-            "description": "Indicates that no more information is needed for the current task. This should be called whenever the query is empty",
+            "name": "no_more_action_needed",
+            "description": "Indicates that no more actio or information is needed for the current task. This should be called whenever the query is empty but also when the asked task has already been accomplished.",
             "parameters": {}
         }
     },
     {
         "type": "function",
         "function": {
-            "name": "add_purchase",
-            "description": "Add a new purchase to the database for a given user.",
+            "name": "add_to_cart",
+            "description": "Adds to the cart the list of products the client explicitly wants to buy. This should be called whenever the client wants to add products to the cart.",
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "product_id": {
-                        "type": "integer",
-                        "description": "The unique identifier for the product."
+                    "precise_product_names": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "The names of the products to add to the cart."
                     },
-                    "product_name": {
-                        "type": "string",
-                        "description": "The name of the product being purchased."
+                    "prices": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "description": "The prices of the products to add to the cart."
                     },
-                    "user_id": {
-                        "type": "integer",
-                        "description": "The unique identifier for the user"
+                    "amounts": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "description": "The quantity of each product to add to the cart."
                     }
                 },
-                "required": ["user_id", "product_name", "quantity"],
+                "required": ["precise_product_names", "prices", "amounts"],
                 "additionalProperties": False
             }
         }
-    },
-    {
-        "type": "function",
-        "function": {
-            "name": "cancel_purchase",
-            "description": "Cancels a purchase based on the provided parameters.",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "user_id": {
-                        "type": "integer",
-                        "description": "The unique identifier for the user."
-                    },
-                    "purchase_id": {
-                        "type": "integer",
-                        "description": "The unique identifier for the purchase.",
-                        
-                    },
-                    "product_name": {
-                        "type": "string",
-                        "description": "The name of the product.",
-                        
-                    },
-                    "purchased_date": {
-                        "type": "string",
-                        "description": "The date of the purchase.",
-                        
-                    }
-                },
-                "required": ["user_id"],
-                "additionalProperties": False
-            }
-        }
-    },
-    
+    }
 ]
 
 

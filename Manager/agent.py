@@ -1,7 +1,7 @@
 from mistralai import Mistral
 import tool_config 
 import json
-
+from recommendation_user import get_best_purchases_from_neighbours
 ### IMPORTE NECESSARY FUNCTIONS CALLED IN THE QUERY FUNCTION
 # from .... import retrieve_best_productsV0
 # from .... import retrieve_best_productsV1
@@ -24,7 +24,7 @@ class Agent:
         self.tools = tool_config.tools_conf
         self.names_to_functions = tools_func.names_to_functions
         self.agent_id = custom_agent_id
-
+        self.user_id = 0
         self.user_query = ""
         self.data = ""
         self.advice = ""
@@ -37,6 +37,7 @@ class Agent:
         self.memory = self.memory + " user :  " + user_message
         self.build_expert_input()
         thinking_lim = 2
+        self.querry_data = ""
         while self.querry_data != "STOP" and thinking_lim > 0:
             self.update_advice()
             print("1 : " , self.expert_input)
@@ -102,13 +103,16 @@ class Agent:
                 tool_choice = "any",
                 )
         function_name = response.choices[0].message.tool_calls[0].function.name
+        print("function_name : ", function_name)
         function_params = json.loads(response.choices[0].message.tool_calls[0].function.arguments)
         if function_name == "get_k_nearests_product":
+            print("I AM LOOKING FOR PRODUCTS")
             new_products, self.querry_data = self.names_to_functions[function_name](**function_params)
             if new_products != []:
                 self.products = new_products
         elif function_name == "add_to_cart":
-            new_cart, self.querry_data = self.names_to_functions[function_name](self.cart, **function_params)
+            print("I AM ADDING TO CART")
+            new_cart, self.querry_data = self.names_to_functions[function_name](**function_params)
             for c in new_cart:
                 self.cart.append(c)
         else:
@@ -143,4 +147,9 @@ class Agent:
         return self.expert_input
     
     def get_init_message(self): 
-        return "Hello! I am your personnal assistant for today. How can I help you ?"
+        recommendation, text = get_best_purchases_from_neighbours(self.user_id)
+        self.products = recommendation
+        
+        
+        
+        return f"Hello! I am your personnal assistant for today. On the left you can find some recommendation :  How can I help you ?"
