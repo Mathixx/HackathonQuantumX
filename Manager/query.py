@@ -49,7 +49,7 @@ class Query:
                 model = self.agent_id,
                 messages = messages,
                 tools = self.tools,
-                tool_choice = "auto",
+                tool_choice = "any",
                 )
             
             print("RESPONSE")
@@ -74,6 +74,8 @@ class Query:
                     return function_name, best_products
                 elif function_name == "handle_insufficient_info":
                     return function_name, parameters
+                elif function_name == "check_user_purchase_history":
+                    return function_name, "NO HISTORY"
                 else:
                     return "error", f"Unknown function: {function_name}"
             else:

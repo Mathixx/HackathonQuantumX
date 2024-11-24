@@ -29,18 +29,19 @@ class Manager:
             string_result = str(result)
 
 
-        # response = {
-        #     "advice": advice,
-        #     "function": function_name,
-        #     #convert result to a string
-        #     "result": string_result
-        # }
-        # #convert response to string
-        # str_response = ""
-        # for key, value in response.items():
-        #     str_response += f"{key}: {value}\n"
+        response = {
+            "input": input,
+            "advice": advice,
+            "function": function_name,
+            #convert result to a string
+            "result": string_result
+        }
+        #convert response to string
+        str_response = ""
+        for key, value in response.items():
+            str_response += f"{key}: {value}\n"
 
-        pitch = self.sales.get_response(self.last_advice, string_result)
+        pitch = self.sales.get_response(self.last_advice, str_response)
         print("pitch : " + pitch)
         self.last_pitch = pitch
 
