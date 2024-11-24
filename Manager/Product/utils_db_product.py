@@ -56,7 +56,7 @@ class Retrieve_from_db_prd:
         """
         conn = sqlite3.connect(Retrieve_from_db_prd.product_db_path)
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM product WHERE product_id = ?", (product_id))
+        cursor.execute("SELECT * FROM products WHERE product_id = ?", (product_id,))
         product = cursor.fetchone()
         conn.close()
         return product
