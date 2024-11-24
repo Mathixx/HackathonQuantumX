@@ -37,15 +37,21 @@ class Agent:
         self.memory = self.memory + " user :  " + user_message
         self.build_expert_input()
         thinking_lim = 2
+        self.querry_data = ""
         while self.querry_data != "STOP" and thinking_lim > 0:
-            self.update_advice()
+            # self.update_advice()
+            # print("1 : " , self.expert_input)
+            # self.get_next_querry()
+            # print("2 : " , self.expert_input)
+            # self.get_next_action()
+            # print("3 : " , self.expert_input)
             print("1 : " , self.expert_input)
-            self.get_next_querry()
+            self.process_customer_interaction(user_message, self.user_query)
             print("2 : " , self.expert_input)
             self.get_next_action()
             print("3 : " , self.expert_input)
             self.update_data(self.querry_data)
-            print("4 : " , self.expert_input)
+
             thinking_lim -= 1
         resp = self.get_reseponse()
         self.memory = self.memory + " agent :  " + resp
@@ -55,6 +61,40 @@ class Agent:
     def build_expert_input(self):
         self.expert_input = "{\"user_input\": \"" + self.user_query + "\"; \"data_available\": \"" + self.data + "\"; \"Advice\": \"" + self.advice + "\"; \"new_data_query\": \"" + self.next_data_query + "\"}"
         
+
+    def process_customer_interaction(self, user_message, external_data=None):
+        task = """
+        You are assisting with a customer interaction. Your role is to sequentially perform the following tasks:
+        1. **Update Advice**: Based on the customer input and available data, update the advice to be given to the customer. The advice should be concise, clear, and to the point. Do not modify any other fields.
+                
+        2. **Generate Next Data Query**: Based on the client input and the updated available data, determine the next data query needed. Use clear action verbs like 'Find' or 'Identify' to specify what additional information is required. If all necessary data is available, leave the `new_data_query` field empty.
+        
+        The response should be in the following JSON format:
+        {"user_input": "...", "data_available": "...", "Advice": "...", "new_data_query": "..."}
+        """
+        
+        txt_message = f"""
+        Previous messages: {self.memory}
+        External data: {external_data if external_data else "None"}
+        Customer input: {user_message}
+        Current state: {self.expert_input}
+        
+        {task}
+        """
+        
+        messages = [
+            {
+                "role": "user",
+                "content": txt_message
+            }
+        ]
+        
+        # Make a single API call
+        agent_response = self.client.agents.complete(agent_id=self.agent_id, messages=messages)
+        
+        # Update the expert_input with the API response
+        self.expert_input = agent_response.choices[0].message.content
+
 
     def update_advice(self):
         task = "based on the current input, updcate the advice to be made for the customer. Answer should be in the right format. Only the advice should be updated, and not the other fields. Answer should kept short. Don't make it too long. Go straight to the point."
@@ -70,7 +110,7 @@ class Agent:
         self.expert_input = agent_response.choices[0].message.content
 
     def update_data(self, data):
-        task = "Here are the previous messages : " + self.memory + " ." + "The goal is to update the data_available field with new data received through external data. The data_available field should now include this new data, appropriately labeled. For example, if the query suggests products, add the list of products to data_available, labeling it as 'product suggestion'. Instructions: Update data_available with the information from the external data field. Each addition should be labeled with a descriptive tag, based on the external data tag. Be very precise. For example, Suggested products and previously bought products shouldbe labeled differently .Clear the new_data_query field after updating data_available. This field should be set to empty as a result of this operation.Do not modify any other fields besides data_available and new_data_query.Your response should reflect these changes, with data_available updated and new_data_query cleared. Do not remove any information which was the data_available field. "
+        task = "Here are the previous messages : " + self.memory + " ." + "The goal is to update the data_available field with new data received through external data. The data_available field should now include this new data, appropriately labeled. Keep  it short and concise, no need to include all the details, only the most important information. For example, if the query suggests products, add the list of products to data_available, labeling it as 'product suggestion'. Instructions: Update data_available with the information from the external data field. Each addition should be labeled with a descriptive tag, based on the external data tag. Be concise. For example, Suggested products and previously bought products shouldbe labeled differently .Clear the new_data_query field after updating data_available. This field should be set to empty as a result of this operation.Do not modify any other fields besides data_available and new_data_query.Your response should reflect these changes, with data_available updated and new_data_query cleared. Do not remove any information which was the data_available field. "
         txt_message = task + " External data : " + data + "  Current fields :  " + self.expert_input
         messages = [
             {
