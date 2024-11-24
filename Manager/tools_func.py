@@ -104,7 +104,7 @@ def get_best_purchases_from_neighbours(user_id = 0) ->Tuple[ str, list]:
         text += "\n"
         products_id.append(purchase[1]) 
     products = Retrieve_from_db_prd.get_product_by_id_list(products_id)
-    products_refined = [(produit[1], produit[2], produit[4]) for produit in produits]
+    products_refined = [(produit[1], produit[2], produit[4]) for produit in products]
     
     return text , products_refined
 
