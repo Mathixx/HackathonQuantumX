@@ -19,6 +19,7 @@ cursor = conn.cursor()
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS purchases (
     purchase_id INTEGER PRIMARY KEY,
+    product_id INTEGER,
     product_name TEXT NOT NULL,
     purchase_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
     rating INTEGER,

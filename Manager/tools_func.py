@@ -81,8 +81,8 @@ def get_k_nearest_users( user_id : int , k= 3) -> list[Tuple]:
     return index_neighbours, users 
 
 
-def get_best_purchases_from_neighbours(user_id = 0):
-    """ Renvoie les 3 meilleurs achats des  3 voisins les plus proches 
+def get_best_purchases_from_neighbours(user_id = 0) -> str:
+    """ Renvoie les 3 meilleurs achats des  3 voisins les plus proches, en version texte , cf function 
 
     Args:
         user_id (int, optional): _description_. Defaults to 0.
@@ -94,6 +94,10 @@ def get_best_purchases_from_neighbours(user_id = 0):
         neighbours_id = index_neighbours[i]
         purchase_neighbours = RetrieveDatabase.get_best_k_purchases_by_user_id(neighbours_id)
         purchases.extend(purchase_neighbours)
-    
-    return purchases
+    text = ""
+    for purchase in purchases : 
+        text += RetrieveDatabase.tuple_to_detailed_text(purchase)
+        text += "\n"
+        
+    return text 
     
