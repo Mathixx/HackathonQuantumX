@@ -93,34 +93,14 @@ tools_conf = [
                 "type": "object",
                 "properties": {
                     "user_id": {
-                        "type": "string",
+                        "type": "int",
                         "description": "The unique identifier for the user whose purchase history is being analyzed."
                     },
-                    "include_current_orders": {
-                        "type": "boolean",
-                        "description": "Whether to include the user's current orders in the analysis."
+                    "k": {
+                        "type": "int",
+                        "description": "How many purchases to recover"
                     },
-                    "category_filter": {
-                        "type": ["string", "null"],
-                        "description": "Optional filter to analyze purchases within a specific product category (e.g., electronics, fashion). Null if not applicable."
-                    },
-                    "time_range": {
-                        "type": ["object", "null"],
-                        "properties": {
-                            "start_date": {
-                                "type": "string",
-                                "format": "date",
-                                "description": "Start date for filtering purchase history (e.g., 2023-01-01)."
-                            },
-                            "end_date": {
-                                "type": "string",
-                                "format": "date",
-                                "description": "End date for filtering purchase history (e.g., 2023-12-31)."
-                            }
-                        },
-                        "required": ["start_date", "end_date"],
-                        "description": "Optional time range for filtering purchase history. Null if not applicable."
-                    }
+                 
                 },
                 "required": ["user_id", "include_current_orders"],
                 "additionalProperties": False

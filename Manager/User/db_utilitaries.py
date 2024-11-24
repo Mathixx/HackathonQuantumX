@@ -378,7 +378,29 @@ class RetrieveDatabase:
         user_dict = dict(zip(columns, user_tuple))
         return user_dict
 
+    @staticmethod
+    def tuple_to_detailed_text(purchase:Tuple ):
+        """ Genere un petit texte partir d'un purchase 
 
+        Args:
+            purchase (Tuple) 
+
+        """
+        purchase_id, product_name, purchase_date, rating, review, buyer_id = purchase
+        
+        # Construire le texte descriptif
+        text = f"Buyer {buyer_id} purchased the product '{product_name}' on {purchase_date}.\n"
+        if rating is not None:
+            text += f"They rated it {rating} out of 5.\n"
+        else:
+            text += "They did not provide a rating for this purchase.\n"
+        
+        if review is not None and review:
+            text += f"Their review of the product is as follows: \"{review}\".\n"
+        else:
+            text += "They did not leave a review for this purchase.\n"
+        
+        return text
             
         
     

@@ -5,7 +5,7 @@ from tool_config import tools_conf
 ### IMPORTE NECESSARY FUNCTIONS CALLED IN THE QUERY FUNCTION
 # from .... import retrieve_best_productsV0
 # from .... import retrieve_best_productsV1
-
+from tools_func import get_k_purchase
 # Retrieve the API key from the environment variable
 api_key = "W7jZ5RO87zVxhO0gehFjjg0TqyXasmGj"
 if not api_key:
@@ -75,7 +75,10 @@ class Query:
                 elif function_name == "handle_insufficient_info":
                     return function_name, parameters
                 elif function_name == "check_user_purchase_history":
-                    return function_name, "NO HISTORY"
+                    user_id = parameters["properties"]["user_id"]
+                    k =  parameters["properties"]["k"]
+                    history = get_k_purchase(user_id, k)
+                    return function_name, history
                 else:
                     return "error", f"Unknown function: {function_name}"
             else:
