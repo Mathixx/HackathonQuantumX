@@ -100,4 +100,20 @@ def get_best_purchases_from_neighbours(user_id = 0) -> str:
         text += "\n"
         
     return text 
+
+
+
+def get_not_delivered(user_id: int) -> str:
+    """renvoie un texte résumant les purchases ono délivrer du user
+
+    Args:
+        user_id (int)
+    """
+    purchases = RetrieveDatabase.get_not_delivered_purchases(user_id)
+    text = "Here are the commands not received: \n"
     
+    for purchase in purchases:
+        _, _, product_name, purchase_date , _,_,_,_ = purchase
+        text += f"{product_name}, purchased on the {product_name}"
+        
+    return text

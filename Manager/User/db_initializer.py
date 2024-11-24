@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS purchases (
     product_id INTEGER,
     product_name TEXT NOT NULL,
     purchase_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+    delivered INTEGER NOT NULL,
     rating INTEGER,
     review TEXT,
     buyer_id INTEGER,

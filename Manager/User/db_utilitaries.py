@@ -39,16 +39,16 @@ class UpdateDatabase:
     user_faiss_db_path = os.path.join(USER_DB_FOLDER, USER_FAISS_DB_FILE)
 
     @staticmethod
-    def add_purchase(product_id , product_name, buyer_id, rating=None, review=None):
+    def add_purchase(product_id , product_name,  buyer_id ,delivered = 0, rating=None, review=None):
         """Add a new purchase to the database."""
         conn = sqlite3.connect(UpdateDatabase.user_db_path)
         cursor = conn.cursor()
         cursor.execute(
             """
-            INSERT INTO purchases (product_id, product_name, rating, review, buyer_id)
+            INSERT INTO purchases (product_id, product_name, delivered, rating, review, buyer_id)
             VALUES (?, ?, ?, ?, ?)
             """,
-            (product_id, product_name, rating, review, buyer_id)
+            (product_id, product_name,delivered, rating, review, buyer_id)
         )
         conn.commit()
         conn.close()
@@ -382,7 +382,7 @@ class RetrieveDatabase:
         Returns:
             dict: A dictionary with column names as keys and tuple values as values.
         """
-        columns = ["purchase_id",'product_id', "product_name", "rating", "review", "buyer_id"]
+        columns = ["purchase_id",'product_id', "product_name", "delivered","rating", "review", "buyer_id"]
         purchase_dict = dict(zip(columns, purchase_tuple))
         return purchase_dict
     
@@ -410,10 +410,12 @@ class RetrieveDatabase:
             purchase (Tuple) 
 
         """
-        purchase_id, product_id , product_name, purchase_date, rating, review, buyer_id = purchase
+        purchase_id, product_id , product_name, purchase_date,delivered_status, rating, review, buyer_id = purchase
         
         # Construire le texte descriptif
         text = f"Buyer {buyer_id} purchased the product '{product_name}' on {purchase_date}.\n"
+        if delivered_status  == 0 :
+            text+= " It has not been yet delivered"
         if rating is not None:
             text += f"They rated it {rating} out of 5.\n"
         else:
@@ -428,4 +430,26 @@ class RetrieveDatabase:
             
         
     
-    
+    @staticmethod
+    def get_not_delivered_purchases(user_id :int ) -> list[Tuple]:
+        """
+        Retrieve all the purchases that as not be delivered
+
+        Args:
+            user_id (int)
+            k:int 
+
+        Returns:
+            List[Tuple]
+        """
+        conn = sqlite3.connect(RetrieveDatabase.user_db_path) 
+        cursor = conn.cursor() 
+        cursor.execute( """ SELECT * 
+                       FROM purchases 
+                       WHERE buyer_id = ? AND 
+                       delivered = 0  
+                       """, 
+                       (user_id) ) 
+        purchases = cursor.fetchall() 
+        conn.close() 
+        return purchases
