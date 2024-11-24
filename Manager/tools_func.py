@@ -146,6 +146,61 @@ def cancel_purchase(user_id: int,
     _ = []
     return res ,_
 
+def add_purchase(product_id: int, product_name: str, user_id: int) -> Tuple[str, list]:
+    """add purchase to the database
+
+    Args:
+        user_id (int): 
+        product_name (str): 
+        quantity (int): 
+
+    Returns:
+        str: 
+    """
+    user_id = 0 
+    res = UpdateDatabase.add_purchase(product_id, product_name, user_id, delivered = 0, rating=None, review=None)
+    _ = []
+    return res,_
+
+
+
+
+
+def collect_user_feedback(user_id:int, purchase_id:int, rating:int, review:str) -> Tuple[str, list]:
+    """collect user feedback
+
+    Args:
+        user_id (int): 
+        product_id (int): 
+        rating (int): 
+        review (str): 
+
+    Returns:
+        str: 
+    """
+    res = UpdateDatabase.update_review(user_id, purchase_id, rating, review)
+    _ = []
+    return res,_
+
+def get_total_spent(user_id:int) -> Tuple[str, list]:
+    """get total spent by user
+
+    Args:
+        user_id (int): 
+
+    Returns:
+        str: 
+        
+    """
+    purchases = RetrieveDatabase.get_all_purchases(user_id)
+    products_ids = [purchase[1] for purchase in purchases]
+    total_spent = 0
+    for product_id in products_ids:
+        product = Retrieve_from_db_prd.get_product_by_id(product_id)
+        total_spent += product[-2]
+        
+    _ = []
+    return f"The user has spent a total of ${total_spent:.2f} on the platform.", _
 
 
 

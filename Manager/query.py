@@ -105,6 +105,20 @@ class Query:
                     nearest_users = get_k_nearest_users(user_id, k)
                     return function_name, nearest_users
                 
+                elif function_name == "add_purchase":
+                    user_id = parameters_dict.get("user_id")
+                    product_id = int(parameters_dict.get("product_id", 450))
+                    product_name = parameters_dict.get("product_name")
+                    result = add_purchase(product_id,product_name, user_id) 
+                    return function_name, result
+                
+                elif function_name == "cancel_purchase":
+                    user_id = parameters_dict.get("user_id")
+                    purchase_id = int(parameters_dict.get("purchase_id", None))
+                    product_name = parameters_dict.get("product_name", None)
+                    purchase_date = parameters_dict.get("purchase_date", None)
+                    result = cancel_purchase(user_id, purchase_id, product_name, purchase_date) 
+                    return function_name, result
                 
                 elif function_name == "get_best_purchases_from_neighbours":
                     user_id = int(parameters["properties"].get("user_id", 0))

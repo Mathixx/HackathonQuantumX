@@ -140,5 +140,65 @@ tools_conf = [
                 "additionalProperties": False
             }
         }
-    }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "add_purchase",
+            "description": "Add a new purchase to the database for a given user.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "product_id": {
+                        "type": "integer",
+                        "description": "The unique identifier for the product."
+                    },
+                    "product_name": {
+                        "type": "string",
+                        "description": "The name of the product being purchased."
+                    },
+                    "user_id": {
+                        "type": "integer",
+                        "description": "The unique identifier for the user"
+                    }
+                },
+                "required": ["user_id", "product_name", "quantity"],
+                "additionalProperties": False
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "cancel_purchase",
+            "description": "Cancels a purchase based on the provided parameters.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "user_id": {
+                        "type": "integer",
+                        "description": "The unique identifier for the user."
+                    },
+                    "purchase_id": {
+                        "type": "integer",
+                        "description": "The unique identifier for the purchase.",
+                        
+                    },
+                    "product_name": {
+                        "type": "string",
+                        "description": "The name of the product.",
+                        
+                    },
+                    "purchased_date": {
+                        "type": "string",
+                        "description": "The date of the purchase.",
+                        
+                    }
+                },
+                "required": ["user_id"],
+                "additionalProperties": False
+            }
+        }
+    },
+    
 ]
