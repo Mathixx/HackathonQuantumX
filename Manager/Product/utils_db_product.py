@@ -2,7 +2,7 @@ import sqlite3
 from typing import List, Tuple , Dict
 import os
 
-class Retrieve_from_db:
+class Retrieve_from_db_prd:
      # Define the productDB folder and file
     PRODUCT_DB_FOLDER = "Manager\\Product"
     PRODUCT_DB_FILE = "products.db"
@@ -22,7 +22,7 @@ class Retrieve_from_db:
             list[Tuple]
         """
         # Connexion à la base de données
-        conn = sqlite3.connect(Retrieve_from_db.product_db_path)
+        conn = sqlite3.connect(Retrieve_from_db_prd.product_db_path)
         cursor = conn.cursor()
 
         
@@ -51,10 +51,39 @@ class Retrieve_from_db:
         Returns:
             Tuple
         """
-        conn = sqlite3.connect(Retrieve_from_db.product_db_path)
+        conn = sqlite3.connect(Retrieve_from_db_prd.product_db_path)
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM users WHERE user_id = ?", (product_id))
         product = cursor.fetchone()
         conn.close()
         return product
+    
+    @classmethod
+    def product_to_paragraph(product):
+        """
+        Prend une ligne de la table 'products' sous forme de tuple et retourne un paragraphe descriptif.
+
+        Arguments:
+            product (tuple): Une ligne de la table, avec les colonnes (product_id, name, avg_ratings, no_of_ratings, actual_price, product_description).
+
+        Retour:
+            str: Un paragraphe descriptif détaillé sur le produit.
+        """
+        product_id, name, avg_ratings, no_of_ratings, actual_price, product_description = product
+
+        # Construire le paragraphe
+        paragraph = f"The product '{name}' is priced at ${actual_price:.2f}. "
+        if avg_ratings is not None and no_of_ratings is not None:
+            paragraph += f"It has an average rating of {avg_ratings:.1f} out of 5, based on {no_of_ratings} reviews. "
+        elif avg_ratings is not None:
+            paragraph += f"It has an average rating of {avg_ratings:.1f} out of 5. "
+        else:
+            paragraph += "No ratings are available for this product yet. "
+        
+        if product_description:
+            paragraph += f"Here is a brief description: {product_description}"
+        else:
+            paragraph += "Unfortunately, there is no detailed description available for this product."
+        
+        return paragraph
 

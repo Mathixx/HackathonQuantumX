@@ -57,3 +57,39 @@ class BaseMistral:
                 return "I'm sorry, I couldn't generate a response. Please try again."
         except Exception as e:
             return f"An error occurred: {e}"
+        
+        
+    def summarize(self, text: str )-> str:
+        """Summarize a text using mistral api 
+
+        Args:
+            text (str)
+        """
+        
+        query = f"""
+             You are a model capable of summarizing a text while preserving its essence. Your task is to generate a concise and clear summary by extracting key information and simplifying ideas without losing important content.
+
+            Task:
+            Summarize the following text succinctly, including the most important points and keeping a neutral, informative tone.
+
+            Text to Summarize:
+            {text}
+            """
+            
+        messages = [
+            {"role" : "user",
+            "content": query}
+                    ]
+        
+        
+        try:
+            # Send the query to the custom agent
+            response = self.client.chat.complete(model=self.agent_id, messages=messages)
+
+            # Extract the assistant's reply
+            if response and response.choices:
+                return response.choices[0].message.content
+            else:
+                return "I'm sorry, I couldn't generate a response. Please try again."
+        except Exception as e:
+            return f"An error occurred: {e}"
