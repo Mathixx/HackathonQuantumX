@@ -18,9 +18,15 @@ Finally, the third agent acts as a powerful query engine, translating the main a
 
 Together, these agents work in perfect harmony, transforming the user experience into an intelligent, responsive, and highly personalized interaction.
 
+## DEMO
+
+A video is available in this drive : https://drive.google.com/drive/folders/1Mz7h53gX4tGx6GNDQJNJhAiRZpWTfE1B?usp=share_link
+
 ## Getting Started
 
 These instructions will help you set up and run the project on your local machine for development and testing purposes.
+
+
 
 ---
 
