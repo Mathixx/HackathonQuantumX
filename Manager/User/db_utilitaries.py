@@ -531,3 +531,4 @@ class RetrieveDatabase:
         purchases = cursor.fetchall() 
         conn.close() 
         return purchases
+    
