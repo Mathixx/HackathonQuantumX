@@ -4,17 +4,18 @@ function ProductList({ products }) {
   return (
     <div>
       <h3>Products</h3>
-      <ul>
+      <div className="product-list">
         {products.length > 0 ? (
           products.map((product, index) => (
-            <li key={index}>
-              {product.name} - {product.price}
-            </li>
+            <div key={index} className="product-card">
+              <h4 className="product-name">{product.name}</h4>
+              <p className="product-price">${product.price}</p>
+            </div>
           ))
         ) : (
-          <li>No products available.</li>
+          <p>No products available.</p>
         )}
-      </ul>
+      </div>
     </div>
   );
 }
