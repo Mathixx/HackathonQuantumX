@@ -4,12 +4,11 @@ import os
 
 class Retrieve_from_db_prd:
      # Define the productDB folder and file
-    PRODUCT_DB_FOLDER = "Manager\\Product"
+    PRODUCT_DB_FOLDER = "Manager/Product"
     PRODUCT_DB_FILE = "products.db"
 
     # Define the path to the database
     product_db_path = os.path.join(PRODUCT_DB_FOLDER, PRODUCT_DB_FILE)
-    product_db_path =r'C:\Users\monce\Desktop\HackQB\HackathonQuantumX\Manager\Product\products.db'
     
     @staticmethod
     def get_product_by_id_list( product_id_list : list[int] ) -> list[Tuple]:
