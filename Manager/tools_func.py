@@ -8,7 +8,7 @@ from typing import Tuple
 
 def no_more_info_needed() -> str:
     """Indicates no more information is needed."""
-    return "STOP"
+    return [], "STOP"
 
 
 def user_purchase_history(user_id: int, k: int = 5) -> str:
@@ -20,7 +20,7 @@ def user_purchase_history(user_id: int, k: int = 5) -> str:
         res += '\n'
     if not res:
         res = "NO HISTORY"
-    return res
+    return [], res
 
 
 def get_k_nearests_product(query: str, k: int = 3) -> Tuple[str, list]:

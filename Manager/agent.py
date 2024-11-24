@@ -53,7 +53,7 @@ class Agent:
         
 
     def update_advice(self):
-        task = "based on the current input, update the advice to be made for the customer. Answer should be in the right format. Only the advice should be updated, and not the other fields"
+        task = "based on the current input, updcate the advice to be made for the customer. Answer should be in the right format. Only the advice should be updated, and not the other fields. Answer should kept short. Don't make it too long. Go straight to the point."
         txt_message = task + "  " + self.expert_input
         messages = [
             {
