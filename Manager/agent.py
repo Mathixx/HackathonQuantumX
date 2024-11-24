@@ -14,7 +14,6 @@ custom_agent_id = "ag:68495cb5:20241123:expert-tpmc:bbd4e63b"
 
 
 
-
 class Agent:
     def __init__(self):
         self.products = []
@@ -47,7 +46,7 @@ class Agent:
         self.user_query = user_message
         self.memory = self.memory + " user :  " + user_message
         self.build_expert_input()
-        thinking_lim = 2
+        thinking_lim = 1
         self.querry_data = ""
         while self.querry_data != "STOP" and thinking_lim > 0:
             self.update_advice()
@@ -66,7 +65,7 @@ class Agent:
         
     def build_expert_input(self):
         print("Building expert input")
-        print("user input :", self.expert_input)
+        """print("user input :", self.expert_input)
         if self.expert_input != "":
             # Parse the existing expert input as JSON
             # Clean up the extra enclosing quotes and line breaks
@@ -75,7 +74,7 @@ class Agent:
             self.data = json_expert_input.get("data_available", "")
         else:
             # Initialize self.data if not already set
-            self.data = ""
+            self.data = """
 
         #  Construct the new expert input as a JSON string
         self.expert_input = json.dumps({
@@ -99,7 +98,7 @@ class Agent:
         self.expert_input = agent_response.choices[0].message.content
 
     def update_data(self, data):
-        task = "Here are the previous messages : " + self.memory + " ." + "The goal is to update the data_available field with new data received through external data. The data_available field should now include this new data, appropriately labeled. For example, if the query suggests products, add the list of products to data_available, labeling it as 'product suggestion'. Instructions: Update data_available with the information from the external data field. Each addition should be labeled with a descriptive tag, based on the external data tag. Be very precise. For example, Suggested products and previously bought products shouldbe labeled differently .Clear the new_data_query field after updating data_available. This field should be set to empty as a result of this operation.Do not modify any other fields besides data_available and new_data_query.Your response should reflect these changes, with data_available updated and new_data_query cleared. Do not remove any information which was the data_available field. "
+        task = "Update the data_available field with labeled data from external_data. Use descriptive tags based on the external_data type (e.g., '#product suggestions' or 'previously bought products'). Retain existing data_available content. Clear the new_data_query field after updating. Modify only data_available and new_data_query. Ensure the response reflects these changes" #The goal is to update the data_available field with new data received through external data. The data_available field should now include this new data, appropriately labeled. For example, if the query suggests products, add the list of products to data_available, labeling it as 'product suggestion'. Instructions: Update data_available with the information from the external data field. Each addition should be labeled with a descriptive tag, based on the external data tag. Be very precise. For example, Suggested products and previously bought products shouldbe labeled differently .Clear the new_data_query field after updating data_available. This field should be set to empty as a result of this operation.Do not modify any other fields besides data_available and new_data_query.Your response should reflect these changes, with data_available updated and new_data_query cleared. Do not remove any information which was the data_available field. "
         txt_message = task + " External data : " + data + "  Current fields :  " + self.expert_input
         messages = [
             {
@@ -112,10 +111,10 @@ class Agent:
         self.expert_input = agent_response.choices[0].message.content
         
     def get_next_action(self):
-        task = "From this input state, extract the content of the 'new_data_query' field, and use it to decide what action to take next. The action should be a function call, with the right parameters. The function to call should be chosen based on the new_data_query field. The parameters should be extracted from the new_data_query field. The other fields should be discarded. The action should be in the right format. "
+        task = "Extract the `new_data_query` field from the input, determine the appropriate function to call based on its content, and extract its parameters. Discard other fields. Format the action as a function call with the chosen function and parameters." #"From this input state, extract the content of the 'new_data_query' field, and use it to decide what action to take next. The action should be a function call, with the right parameters. The function to call should be chosen based on the new_data_query field. The parameters should be extracted from the new_data_query field. The other fields should be discarded. The action should be in the right format. "
 
 
-        txt_message = "Here are the previous messages : " + self.memory + " ." + task + " Here is the input state :   " + self.expert_input
+        txt_message = task + " Here is the input state :   " + self.expert_input
         messages = [
             {
                 "role": "user",
@@ -148,7 +147,7 @@ class Agent:
 
     
     def get_next_querry(self):
-        task = "Here are the previous messages : " + self.memory + " ." + "Based on the client input and the available data, generate the next data query to be made. The query should use action verbs (e.g., 'Find', 'Identify') to clearly indicate what needs to be queried. If the required information is already available, leave the data query field empty.Only request the information that is still needed, and avoid asking for unnecessary details. When possible, prioritize looking for products that may be suitable for the user, especially if none have been identified yet. Ensure that each query is focused on one specific piece of information at a time.If products are already in availble_data, you should not request them again. The query should contain all necessary information for the query agent to select the correct function and provide the right argument. The response should be in the correct format, modifying only the data_query field, and should stop once all necessary data has been gathered."
+        task =  "Generate the next `data_query` based on client input and available data. Use action verbs (e.g., 'Find', 'Identify') to specify what needs to be queried. Leave `data_query` empty if the required information is already available. Request only missing information, prioritizing suitable products for the user if none are identified. Focus each query on a single piece of information. Avoid requesting products already in `available_data`. Ensure the query enables the query agent to select the correct function and arguments. Modify only the `data_query` field, stopping when all necessary data is gathered."#"Based on the client input and the available data, generate the next data query to be made. The query should use action verbs (e.g., 'Find', 'Identify') to clearly indicate what needs to be queried. If the required information is already available, leave the data query field empty.Only request the information that is still needed, and avoid asking for unnecessary details. When possible, prioritize looking for products that may be suitable for the user, especially if none have been identified yet. Ensure that each query is focused on one specific piece of information at a time.If products are already in availble_data, you should not request them again. The query should contain all necessary information for the query agent to select the correct function and provide the right argument. The response should be in the correct format, modifying only the data_query field, and should stop once all necessary data has been gathered."
         txt_message = task + "  " + self.expert_input
         messages = [
             {

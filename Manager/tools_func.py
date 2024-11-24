@@ -11,7 +11,7 @@ def no_more_action_needed() -> str:
     return [], "The task has been accomplished. No more action and information is needed."
 
 
-def user_purchase_history(user_id: int, k: int = 5) -> str:
+def user_purchase_history(user_id=0, k: int = 5) -> str:
     """Retrieve the k latest purchases in the database."""
     res = ""
     user_id = 0

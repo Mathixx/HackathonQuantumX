@@ -28,7 +28,7 @@ class Retrieve_from_db_prd:
         
         print("I AM HERE")
 
-        
+        product_id_list = [product_id+1 for product_id in product_id_list]
 
         # Créer une chaîne de paramètres pour la requête SQL
         placeholders = ', '.join(['?'] * len(product_id_list))
@@ -54,6 +54,7 @@ class Retrieve_from_db_prd:
         Returns:
             Tuple
         """
+        product_id +=1
         conn = sqlite3.connect(Retrieve_from_db_prd.product_db_path)
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM products WHERE product_id = ?", (product_id,))

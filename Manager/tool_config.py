@@ -5,7 +5,7 @@ tools_conf = [
         "type": "function",
         "function": {
             "name": "get_k_nearests_product",
-            "description": "Search for the k products in the seller database that are closest to the user's needs. This function is to be used when looking for products to suggest to the client. If this information is already available, it should not be called.",
+            "description": "Search for the k products in the seller database that are closest to the user's needs. This function is to be used when looking for products to suggest to the client.",
             "parameters": {
                 "type": "object",
                 "properties": {
