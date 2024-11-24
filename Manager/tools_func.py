@@ -104,7 +104,7 @@ def get_best_purchases_from_neighbours(user_id = 0) -> str:
 
 
 def get_not_delivered(user_id: int) -> str:
-    """renvoie un texte résumant les purchases ono délivrer du user
+    """renvoie un texte résumant les purchases non délivrer du user
 
     Args:
         user_id (int)

@@ -5,7 +5,7 @@ from tool_config import tools_conf
 ### IMPORTE NECESSARY FUNCTIONS CALLED IN THE QUERY FUNCTION
 # from .... import retrieve_best_productsV0
 # from .... import retrieve_best_productsV1
-from tools_func import get_k_purchase
+from tools_func import *
 # Retrieve the API key from the environment variable
 api_key = "W7jZ5RO87zVxhO0gehFjjg0TqyXasmGj"
 if not api_key:
@@ -72,13 +72,42 @@ class Query:
                     # Normally, you'd call the actual function here
                     best_products = fake_retrieve_best_products(parameters)
                     return function_name, best_products
+                
+                
                 elif function_name == "handle_insufficient_info":
                     return function_name, parameters
+                
+                
                 elif function_name == "check_user_purchase_history":
                     user_id = parameters["properties"]["user_id"]
                     k =  parameters["properties"]["k"]
                     history = get_k_purchase(user_id, k)
                     return function_name, history
+                
+                
+                elif function_name == "get_k_nearests_product":
+                    query = parameters["properties"]["query"]
+                    k = parameters["properties"].get("k", 3)
+                    nearest_products = get_k_nearests_product(query, k)
+                    return function_name, nearest_products
+                
+                elif function_name == "get_k_nearest_users":
+                    user_id = parameters["properties"]["user_id"]
+                    k = parameters["properties"].get("k", 3)
+                    nearest_users = get_k_nearest_users(user_id, k)
+                    return function_name, nearest_users
+                
+                
+                elif function_name == "get_best_purchases_from_neighbours":
+                    user_id = parameters["properties"].get("user_id", 0)
+                    best_purchases = get_best_purchases_from_neighbours(user_id)
+                    return function_name, best_purchases
+                
+                
+                elif function_name == "get_not_delivered":
+                    user_id = parameters["properties"]["user_id"]
+                    not_delivered = get_not_delivered(user_id)
+                    return function_name, not_delivered
                 else:
                     return "error", f"Unknown function: {function_name}"
             else:

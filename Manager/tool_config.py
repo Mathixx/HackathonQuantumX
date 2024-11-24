@@ -4,51 +4,87 @@ tools_conf = [
     {
         "type": "function",
         "function": {
-            "name": "retrieve_best_products",
-            "description": "Gets the best products based on user preferences and the database of products.",
+            "name": "get_k_nearests_product",
+            "description": "Search for the k products closest to the user's query .",
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "category_abstract": {
+                    "query": {
                         "type": "string",
-                        "description": "The abstract category of the product (e.g., electronics, fashion, etc.)."
+                        "description": "The query string to search for similar products."
                     },
-                    "category_precise": {
-                        "type": "string",
-                        "description": "The specific subcategory of the product (e.g., smartphones, laptops)."
-                    },
-                    "max_price": {
-                        "type": ["number", "null"],
-                        "minimum": 0,
-                        "description": "The maximum price for filtering products. Null if not applicable."
-                    },
-                    "min_price": {
-                        "type": ["number", "null"],
-                        "minimum": 0,
-                        "description": "The minimum price for filtering products. Null if not applicable."
-                    },
-                    "min_rating": {
-                        "type": ["number", "null"],
-                        "minimum": 0,
-                        "maximum": 5,
-                        "description": "The minimum average rating required for the product. Null if not applicable."
-                    },
-                    "rating_count": {
-                        "type": ["integer", "null"],
-                        "minimum": 0,
-                        "description": "The minimum number of ratings required for the product. Null if not applicable."
-                    },
-                    "preference": {
-                        "type": "string",
-                        "enum": ["best_seller", "highest_rating", "cheapest", "most_popular"],
-                        "description": "The user's preference for sorting the results."
+                    "k": {
+                        "type": "integer",
+                        "description": "The number of nearest products to retrieve.",
+                        "default": 3
                     }
                 },
-                "required": ["category_abstract", "category_precise", "preference"],
+                "required": ["query"],
                 "additionalProperties": False
             }
         }
     },
+    {
+        "type": "function",
+        "function": {
+            "name": "get_k_nearest_users",
+            "description": "search the users which have a similar profil than the user ",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "user_id": {
+                        "type": "integer",
+                        "description": "The unique identifier for the user."
+                    },
+                    "k": {
+                        "type": "integer",
+                        "description": "The number of nearest users to retrieve.",
+                        "default": 3
+                    }
+                },
+                "required": ["user_id"],
+                "additionalProperties": False
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "get_best_purchases_from_neighbours",
+            "description": "Research the best product that was purchased by users with a similar profil ",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "user_id": {
+                        "type": "integer",
+                        "description": "The unique identifier for the user.",
+                        "default": 0
+                    }
+                },
+                "required": [],
+                "additionalProperties": False
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "get_not_delivered",
+            "description": "Returns a text summarizing the undelivered purchases of the user.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "user_id": {
+                        "type": "integer",
+                        "description": "The unique identifier for the user."
+                    }
+                },
+                "required": ["user_id"],
+                "additionalProperties": False
+            }
+        }
+    }
+       ,
     {
         "type": "function",
         "function": {
