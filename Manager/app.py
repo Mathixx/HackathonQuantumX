@@ -50,7 +50,7 @@ def get_cart():
 
     # Transform cart into JSON-compatible format
     json_cart = [
-        {"name": item[0], "quantity": item[1], "price": item['price']}
+        {"name": item[0], "quantity": item[1], "price": item[2]}
         for item in cart
     ]
 

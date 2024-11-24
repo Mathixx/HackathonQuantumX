@@ -35,6 +35,7 @@ class Agent:
         self.user_query = user_message
         self.build_expert_input()
         thinking_lim = 2
+        self.querry_data = ""
         while self.querry_data != "STOP" and thinking_lim > 0:
             self.update_advice()
             print("1 : " , self.expert_input)
@@ -106,7 +107,8 @@ class Agent:
             if new_products != []:
                 self.products = new_products
         elif function_name == "add_to_cart":
-            new_cart, self.querry_data = self.names_to_functions[function_name](self.cart, **function_params)
+            print("I AM ADDING TO CART")
+            new_cart, self.querry_data = self.names_to_functions[function_name](**function_params)
             for c in new_cart:
                 self.cart.append(c)
         else:

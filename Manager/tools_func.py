@@ -108,5 +108,6 @@ def add_to_cart(precise_product_names: list[str], prices: list[int], amounts: li
 names_to_functions= {
     "get_k_nearests_product": get_k_nearests_product,
     "user_purchase_history": user_purchase_history,
-    "no_more_info_needed": no_more_info_needed
+    "no_more_info_needed": no_more_info_needed,
+    "add_to_cart": add_to_cart
 }
