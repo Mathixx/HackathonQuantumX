@@ -7,7 +7,7 @@ from basemistral import BaseMistral
 from typing import Tuple
 
 
-def get_k_purchase(user_id:int, k:int = 5)-> str:
+def get_k_purchase(user_id:int, k:int = 5)-> Tuple[str, list]:
     """recupère les k dernière purchases dans la database
 
     Args:
@@ -25,11 +25,12 @@ def get_k_purchase(user_id:int, k:int = 5)-> str:
         res += '\n' 
     if not res:
         res = "NO HISTORY"
-    return res 
+    _ = []
+    return res , _
 
 
 
-def get_k_nearests_product(query: str, k :int = 3) -> str :
+def get_k_nearests_product(query: str, k :int = 3) -> Tuple[str, list] :
     """Use RAG to get the 5 nearest product from the query , based on similarity with the descriptions 
 
     Args:
@@ -58,7 +59,7 @@ def get_k_nearests_product(query: str, k :int = 3) -> str :
 
 
 
-def get_k_nearest_users( user_id : int , k= 3) -> list[Tuple]:
+def get_k_nearest_users( user_id : int , k= 3) -> Tuple[list, list]:
     """ utilise faiss pour rechercher les k users les plus proches en ce basant sur le texte d'information
 
     Args:
@@ -83,7 +84,7 @@ def get_k_nearest_users( user_id : int , k= 3) -> list[Tuple]:
     return index_neighbours, users 
 
 
-def get_best_purchases_from_neighbours(user_id = 0) -> str:
+def get_best_purchases_from_neighbours(user_id = 0) ->Tuple[ str, list]:
     """ Renvoie les 3 meilleurs achats des  3 voisins les plus proches, en version texte , cf function 
 
     Args:
@@ -97,15 +98,19 @@ def get_best_purchases_from_neighbours(user_id = 0) -> str:
         purchase_neighbours = RetrieveDatabase.get_best_k_purchases_by_user_id(neighbours_id, 3)
         purchases.extend(purchase_neighbours)
     text = ""
+    products_id = []
     for purchase in purchases : 
         text += RetrieveDatabase.tuple_to_detailed_text(purchase)
         text += "\n"
-        
-    return text 
+        products_id.append(purchase[1]) 
+    products = Retrieve_from_db_prd.get_product_by_id_list(products_id)
+    products_refined = [(produit[1], produit[2], produit[4]) for produit in produits]
+    
+    return text , products_refined
 
 
 
-def get_not_delivered(user_id: int) -> str:
+def get_not_delivered(user_id: int) -> Tuple[str, list]:
     """renvoie un texte résumant les purchases non délivrer du user
 
     Args:
@@ -117,15 +122,15 @@ def get_not_delivered(user_id: int) -> str:
     for purchase in purchases:
         product_name, purchase_date  = purchase[2], purchase[3]
         text += f"{product_name}, purchased on the {product_name}"
-        
-    return text
+    _ = []
+    return text, _
 
 
 
 def cancel_purchase(user_id: int,
                       purchase_id: int = None,
                       product_name: str = None,
-                      purchased_date = None) -> str:
+                      purchased_date = None) -> Tuple[str, list]:
     """cancel order
 
     Args:
@@ -138,7 +143,8 @@ def cancel_purchase(user_id: int,
         str: _description_
     """
     res = UpdateDatabase.suppress_purchase(user_id, purchase_id, product_name, purchased_date)
-    return res 
+    _ = []
+    return res ,_
 
 
 
