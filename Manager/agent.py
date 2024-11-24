@@ -149,16 +149,7 @@ class Agent:
     def get_init_message(self): 
         recommendation, text = get_best_purchases_from_neighbours(self.user_id)
         self.products = recommendation
-        txt_message = f"Write a text to recommand some product based on this text : {text}. \n Instruction be concive, only 5 lines "
         
-        messages = [
-            {
-                "role": "user",
-                "content": txt_message
-            }
-        ]
-
-        agent_response = self.client.agents.complete(agent_id=self.agent_id, messages=messages)
-        response = agent_response.choices[0].message.content
         
-        return f"Hello! I am your personnal assistant for today.Her are some recommendation : \n {agent_response.choices[0].message.content} \n  How can I help you ?"
+        
+        return f"Hello! I am your personnal assistant for today. On the left you can find some recommendation :  How can I help you ?"
