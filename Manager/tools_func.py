@@ -1,5 +1,5 @@
 # fichier des function appellé par query 
-from User.db_utilitaries import RetrieveDatabase
+from User.db_utilitaries import RetrieveDatabase, UpdateDatabase
 from RAG_product.Faiss_database import FaissDatabase
 from Product.utils_db_product import Retrieve_from_db_prd
 from basemistral import BaseMistral
@@ -8,7 +8,7 @@ from typing import Tuple
 
 
 def get_k_purchase(user_id:int, k:int = 5)-> str:
-    """recupère les k derniière purchases dans la database
+    """recupère les k dernière purchases dans la database
 
     Args:
         user_id (int): 
@@ -117,3 +117,31 @@ def get_not_delivered(user_id: int) -> str:
         text += f"{product_name}, purchased on the {product_name}"
         
     return text
+
+
+
+def cancel_purchase(user_id: int,
+                      purchase_id: int = None,
+                      product_name: str = None,
+                      purchased_date = None) -> str:
+    """cancel order
+
+    Args:
+        user_id (int): 
+        purchase_id (int, optional):. Defaults to None.
+        product_name (str, optional): Defaults to None.
+        purchased_date (_type_, optional):  Defaults to None.
+
+    Returns:
+        str: _description_
+    """
+    res = UpdateDatabase.suppress_purchase(user_id, purchase_id, product_name, purchased_date)
+    return res 
+
+
+
+
+
+    
+
+    

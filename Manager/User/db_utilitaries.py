@@ -228,6 +228,71 @@ class UpdateDatabase:
             if conn:
                 conn.close()
                 
+    @staticmethod
+    def suppress_purchase(buyer_id: int,
+                      purchase_id: int = None,
+                      product_name: str = None,
+                      purchased_date = None) -> str:
+        """
+        Supprime une ligne de la table `purchases` si `delivered = 0`.
+
+        Args:
+            buyer_id (int): L'ID de l'acheteur pour limiter la recherche.
+            purchase_id (int, optional): L'ID de l'achat. Si fourni, utilisé comme clé principale pour la suppression.
+            product_name (str, optional): Le nom du produit pour rechercher la ligne si `purchase_id` est None.
+            purchased_date (optional): La date d'achat pour rechercher la ligne si `purchase_id` est None.
+
+        Returns:
+            str: Un message indiquant si la suppression s'est bien déroulée ou décrivant les erreurs.
+        """
+        try:
+            # Connexion à la base de données SQLite
+            conn = sqlite3.connect(UpdateDatabase.user_db_path)
+            cursor = conn.cursor()
+
+            # Étape 1 : Trouver la ligne à supprimer
+            if purchase_id is not None:
+                cursor.execute("""
+                    SELECT * FROM purchases
+                    WHERE purchase_id = ? AND buyer_id = ? AND delivered = 0
+                """, (purchase_id, buyer_id))
+            elif product_name is not None and purchased_date is not None:
+                cursor.execute("""
+                    SELECT * FROM purchases
+                    WHERE product_name = ? AND purchase_date = ? AND buyer_id = ? AND delivered = 0
+                """, (product_name, purchased_date, buyer_id))
+            else:
+                return "Erreur: No such purchase finded"
+
+            row = cursor.fetchone()
+
+            # Étape 2 : Vérifier si la ligne existe
+            if row is None:
+                return "Error: No matching purchase which hasn't be delivered"
+            
+            if len(row)> 2 :
+                return  " Error: Multiple purchases can be deleted, please be more precise "
+
+            # Étape 3 : Supprimer la ligne
+            if purchase_id is not None:
+                cursor.execute("DELETE FROM purchases WHERE purchase_id = ?", (purchase_id,))
+            else:
+                cursor.execute("""
+                    DELETE FROM purchases 
+                    WHERE product_name = ? AND purchase_date = ? AND buyer_id = ?
+                """, (product_name, purchased_date, buyer_id))
+
+            conn.commit()
+            return "Success: The purchase has been successfully deleted."
+
+        except sqlite3.Error as e:
+            return f"Database Error: {str(e)}"
+
+        finally:
+            conn.close()
+
+        
+                
 
 
 class RetrieveDatabase:
