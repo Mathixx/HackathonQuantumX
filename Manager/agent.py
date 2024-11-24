@@ -1,7 +1,7 @@
 from mistralai import Mistral
 import tool_config 
 import json
-
+from recommendation_user import get_best_purchases_from_neighbours
 ### IMPORTE NECESSARY FUNCTIONS CALLED IN THE QUERY FUNCTION
 # from .... import retrieve_best_productsV0
 # from .... import retrieve_best_productsV1
@@ -24,7 +24,7 @@ class Agent:
         self.tools = tool_config.tools_conf
         self.names_to_functions = tools_func.names_to_functions
         self.agent_id = custom_agent_id
-
+        self.user_id = 0
         self.user_query = ""
         self.data = ""
         self.advice = ""
@@ -147,4 +147,18 @@ class Agent:
         return self.expert_input
     
     def get_init_message(self): 
-        return "Hello! I am your personnal assistant for today. How can I help you ?"
+        recommendation, text = get_best_purchases_from_neighbours(self.user_id)
+        self.products = recommendation
+        txt_message = f"Write a text to recommand some product based on this text : {text}. \n Instruction be concive, only 5 lines "
+        
+        messages = [
+            {
+                "role": "user",
+                "content": txt_message
+            }
+        ]
+
+        agent_response = self.client.agents.complete(agent_id=self.agent_id, messages=messages)
+        response = agent_response.choices[0].message.content
+        
+        return f"Hello! I am your personnal assistant for today.Her are some recommendation : \n {agent_response.choices[0].message.content} \n  How can I help you ?"
