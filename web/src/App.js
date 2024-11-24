@@ -11,24 +11,24 @@ function App() {
   const [activeTab, setActiveTab] = useState('products'); // For tab navigation
   const [updateTrigger, setUpdateTrigger] = useState(false); // Trigger for ProductList update
 
-  // Function to trigger product update
-  const triggerProductUpdate = () => {
+  // Function to trigger product and basket updates
+  const triggerProductAndBasketUpdate = () => {
     setUpdateTrigger((prev) => !prev); // Toggle the update trigger state
   };
 
   return (
     <div className="app-container">
-      {/* Right Side */}
+      {/* Left Side */}
       <div className="left-panel">
-        <ChatBox triggerProductUpdate={triggerProductUpdate} /> {/* Pass function to ChatBox */}
+        <ChatBox triggerProductUpdate={triggerProductAndBasketUpdate} /> {/* Pass trigger to ChatBox */}
       </div>
 
-      {/* Left Side */}
+      {/* Right Side */}
       <div className="right-panel">
         <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
-        
-        {activeTab === "products" && <ProductList updateTrigger={updateTrigger} />}  {/* Pass trigger to ProductList */}
-        {activeTab === "basket" && <Basket />}
+
+        {activeTab === "products" && <ProductList updateTrigger={updateTrigger} />} {/* Pass trigger to ProductList */}
+        {activeTab === "basket" && <Basket updateTrigger={updateTrigger} />} {/* Pass trigger to Basket */}
         {activeTab === "orderHistory" && <Orders />}
       </div>
     </div>

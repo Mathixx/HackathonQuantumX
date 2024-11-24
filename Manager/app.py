@@ -39,6 +39,27 @@ def get_products():
     # Return the JSON object
     return jsonify({"products": json_products})
 
+@app.route('/get-cart', methods=['GET'])
+def get_cart():
+    """
+    Fetch and display the current cart contents.
+    """
+    print("Getting cart contents...")
+    cart = manager.get_cart()  # Assuming `manager` has a `get_cart` method
+    print("Cart contents:", cart)
+
+    # Transform cart into JSON-compatible format
+    json_cart = [
+        {"name": item[0], "quantity": item[1], "price": item['price']}
+        for item in cart
+    ]
+
+    print("Transformed JSON Cart:")
+    print(json_cart)
+
+    # Return the JSON object
+    return jsonify({"cart": json_cart})
+
 
 if __name__ == '__main__':
     app.run(debug=True)
