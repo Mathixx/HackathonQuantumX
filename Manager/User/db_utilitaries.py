@@ -52,7 +52,7 @@ class UpdateDatabase:
         )
         conn.commit()
         conn.close()
-        print(f"Added purchase: {product_name}")
+        return f"Added purchase: {product_name}"
 
     @staticmethod
     def update_review(purchase_id, rating=None, review=None):
@@ -88,7 +88,7 @@ class UpdateDatabase:
             )
         conn.commit()
         conn.close()
-        print(f"Updated purchase ID {purchase_id} with rating: {rating}, review: {review}")
+        return f"Updated purchase ID {purchase_id} with rating: {rating}, review: {review}"
 
     @staticmethod
     def add_user(first_name: str, last_name: str, age: int, gender: str = 'undefined', date_sign_in=None) -> None:
