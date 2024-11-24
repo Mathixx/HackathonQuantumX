@@ -22,7 +22,7 @@ class UpdateDatabase:
     """
 
     # Define the userDB folder and file
-    USER_DB_FOLDER = "userDB"
+    USER_DB_FOLDER = "Manager\\User\\userDB"
     USER_DB_FILE = "user_data.db"
 
     # Define the path to the database
@@ -209,11 +209,10 @@ class RetrieveDatabase:
     """
     Class for retrieving data from the database
     """
-    
-    # Define the userDB folder and file
-    USER_DB_FOLDER = "userDB"
+     # Define the userDB folder and file
+    USER_DB_FOLDER = "Manager\\User\\userDB"
     USER_DB_FILE = "user_data.db"
-    
+
     # Define the path to the database
     user_db_path = os.path.join(USER_DB_FOLDER, USER_DB_FILE)
 

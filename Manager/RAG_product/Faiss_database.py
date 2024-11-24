@@ -36,18 +36,20 @@ class FaissDatabase:
     client = Mistral(api_key=API_KEY)
 
     # Chemins vers les fichiers de la base de données
-    database_text_path = "texts_products_database.pkl"
-    database_faiss_path = "index_faiss.faiss"
+   
+    database_faiss_path = "Manager\\RAG_product\\index_faiss.faiss"
     
     @staticmethod
-    def add_texts_to_database(texts: list[str]) -> None:
+    def add_texts_to_database(texts: list[str], db_path : str = None ) -> None:
         """
         Mettre à jour la base de données en ajoutant des textes.
 
         Args:
             texts (list[str]): Textes à ajouter.
+            db_path : path de la base de donnée si ce n'est pas celle des produits 
         """
-        db_path = FaissDatabase.database_faiss_path
+        if db_path is None:
+            db_path = FaissDatabase.database_faiss_path
 
         # Obtenir les embeddings des textes
         text_embeddings = np.array([get_text_embedding(texts[i], FaissDatabase.client, i ) for i in range(len(texts))])
@@ -65,29 +67,20 @@ class FaissDatabase:
         # Sauvegarder l'index mis à jour
         faiss.write_index(index, db_path)
 
-        # Lire la liste existante de textes
-        try:
-            with open(FaissDatabase.database_text_path, 'rb') as file:
-                text_list = pickle.load(file)
-        except FileNotFoundError:
-            text_list = []
+        
 
-        # Ajouter les nouveaux textes à la liste existante
-        text_list.extend(texts)
-
-        # Sauvegarder la liste mise à jour de textes
-        with open(FaissDatabase.database_text_path, 'wb') as file:
-            pickle.dump(text_list, file)
 
     @staticmethod
-    def create_data_base(texts: list[str]) -> None:
+    def create_data_base(texts: list[str], db_path : str = None ) -> None:
         """
         Créer une nouvelle base de données Faiss en ajoutant des textes.
 
         Args:
             texts (list[str]): Textes à ajouter.
+            db_path : path de la base de donnée si ce n'est pas celle des produits 
         """
-        db_path = FaissDatabase.database_faiss_path
+        if db_path is None:
+            db_path = FaissDatabase.database_faiss_path
         texts = [text[:8000] for text in texts ]
         # Obtenir les embeddings des textes
         text_embeddings = np.array([get_text_embedding(texts[i], FaissDatabase.client, i ) for i in range(len(texts))])
@@ -104,23 +97,23 @@ class FaissDatabase:
         # Sauvegarder l'index
         faiss.write_index(index, db_path)
 
-        # Sauvegarder la liste des embeddings dans un fichier pickle
-        with open(FaissDatabase.database_text_path, 'wb') as file:
-            pickle.dump(texts, file)
+        
 
     @staticmethod
-    def search(query: str, k: int = 1) -> list[str]:
+    def search(query: str, k: int = 1, db_path: str = None ) -> list[str]:
         """
         Rechercher les k plus proches voisins de la requête.
 
         Args:
             query (str): Texte de la requête.
             k (int, optional): Nombre de résultats à retourner. Par défaut à 1.
-
+            db_path : lien de la base de donnée 
         Returns:
-            list[str]: Liste des textes trouvés.
+            list[int]: Liste des id des textes proches 
+           
         """
-        db_path = FaissDatabase.database_faiss_path
+        if db_path is None:
+            db_path = FaissDatabase.database_faiss_path
 
         # Obtenir l'embedding de la requête
         query_embedding = np.array([get_text_embedding(query, FaissDatabase.client)])
@@ -135,17 +128,7 @@ class FaissDatabase:
         # Rechercher les k plus proches voisins
         D, I = index.search(query_embedding, k)
 
-        # Lire la liste des textes existants
-        try:
-            with open(FaissDatabase.database_text_path, 'rb') as file:
-                text_list = pickle.load(file)
-        except FileNotFoundError:
-            return []
-
-        # Récupérer les textes correspondants aux indices trouvés
-        res = [text_list[i] for i in I.tolist()[0]]
-
-        return res
+        return  I.tolist()[0]
 
         
 
