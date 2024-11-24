@@ -38,7 +38,7 @@ class FaissDatabase:
 
     # Chemins vers les fichiers de la base de données
    
-    database_faiss_path = "Manager/RAG_product/index_faiss.faiss"
+    database_faiss_path = r'C:\Users\monce\Desktop\HackQB\HackathonQuantumX\Manager\RAG_product\index_faiss.faiss'
     
     @staticmethod
     def add_texts_to_database(texts: list[str], db_path : str = None ) -> None:
