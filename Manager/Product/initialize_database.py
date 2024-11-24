@@ -2,13 +2,21 @@ import sqlite3
 import os 
 import pandas as pd
 
+import sys
+from pathlib import Path
+
+# Ajouter le dossier parent au chemin Python
+sys.path.append(str(Path(__file__).resolve().parent.parent))
+
+from RAG_product.Faiss_database import FaissDatabase 
+
 class InitializeDatabase:
     
-    data_path = "Manager\Product\product_data.csv"
-    db_path = "Manager\Product\products.db"
+    data_path = "Manager\\Product\product_data.csv"
+    db_path = "Manager\\Product\\products.db"
     
     def __init__(self):
-        """Initialise la base de donnée et la rempli avec les données du csv 
+        """Initialise la base de donnée et la remplie avec les données du csv 
         """
         df = pd.read_csv(InitializeDatabase.data_path)
         df.drop(columns=[ "store","details", "top_10_comments"])
@@ -47,11 +55,14 @@ class InitializeDatabase:
             texts.append(description)
             products.append((name, avg_rating, no_of_ratings, price, description))
             
+            
         cursor.executemany("""
             INSERT INTO products (name, avg_ratings, no_of_ratings, actual_price, product_description)
             VALUES (?, ?, ?, ?, ?)
             """, 
             products)
+        #création de la database faiss
+        FaissDatabase.create_data_base(texts)
             
         connection.commit()
         connection.close() 

@@ -3,8 +3,9 @@ from mistralai import Mistral
 import numpy as np
 from getpass import getpass
 import pickle 
+import time
 
-def get_text_embedding(input, client):
+def get_text_embedding(input, client, i: int = 0):
     """
     Obtenir l'embedding d'un texte en utilisant le modèle Mistral.
 
@@ -15,6 +16,8 @@ def get_text_embedding(input, client):
     Returns:
         list[float]: Embedding du texte.
     """
+    time.sleep(0.3)
+    print(f"embedding {i}")
     embeddings_batch_response = client.embeddings.create(
         model="mistral-embed",
         inputs=input
@@ -27,7 +30,7 @@ class FaissDatabase:
     """
     
     # Demander la clé API via la console
-    API_KEY = getpass("Entrez votre clé API Mistral : ")
+    API_KEY = 'W7jZ5RO87zVxhO0gehFjjg0TqyXasmGj'
     
     # Initialiser le client Mistral avec la clé API
     client = Mistral(api_key=API_KEY)
@@ -47,7 +50,7 @@ class FaissDatabase:
         db_path = FaissDatabase.database_faiss_path
 
         # Obtenir les embeddings des textes
-        text_embeddings = np.array([get_text_embedding(text, FaissDatabase.client) for text in texts])
+        text_embeddings = np.array([get_text_embedding(texts[i], FaissDatabase.client, i ) for i in range(len(texts))])
 
         # Lire l'index Faiss existant
         try:
@@ -85,9 +88,9 @@ class FaissDatabase:
             texts (list[str]): Textes à ajouter.
         """
         db_path = FaissDatabase.database_faiss_path
-
+        texts = [text[:8000] for text in texts ]
         # Obtenir les embeddings des textes
-        text_embeddings = np.array([get_text_embedding(text, FaissDatabase.client) for text in texts])
+        text_embeddings = np.array([get_text_embedding(texts[i], FaissDatabase.client, i ) for i in range(len(texts))])
 
         # Déterminer la dimension des embeddings
         dimension = text_embeddings.shape[1]
